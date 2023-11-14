@@ -1,9 +1,15 @@
+require('dotenv').config();
 const express = require('express');
-const app = express();
-const port = 3000;
 const mongoose = require('mongoose');
+
+const app = express();
+
+const DB_ADRESS = process.env.DB_ADDRESS
+const PORT = process.env.PORT || 3000;
+let retryCountToDatabase = 0;
+
 const { Laptop, TV } = require('./models')
-const mongoDB = mongoose.connect('mongodb+srv://root:asdass123@repairme.qimluao.mongodb.net/main?retryWrites=true&w=majority');
+const mongoDB = mongoose.connect(DB_ADRESS);
 
 app.use(express.json());
 
@@ -227,20 +233,42 @@ app.use((req, res, next) => {
   })
 })
 
+const connectToDB = async () => {
+  try {
+    while (true) {
+      let mongo = await mongoDB;
+
+      if (mongo.connection.readyState === 1) {
+        return mongo;
+      } else {
+        if (retryCountToDatabase >= 10) {
+          console.log('Too many tries... Quitting the server. \n');
+          process.abort();
+        }
+        retryCountToDatabase++;
+        await new Promise(resolve => setTimeout(resolve, 2000)); // wait a little
+        console.log(`[ERROR] Connection to MongoDB cluster is failed. Retrying in a second... ${retryCountToDatabase} of 10`);
+        continue;
+      }
+    }
+  } catch (error) {
+    console.log(`[ERROR] - Fatal error while trying to connect to MongoDB cluster. - ${error.message}`)
+  }
+};
+
 const start = async () => {
   try {
-    let mongo = await mongoDB;
+    let mongo = await connectToDB(); // for some reason if we can't connect to db
 
-    if (mongo.connection.readyState === 1) {
-      console.log(`Successfully connected to mongoDB cluster! Version ${mongo.version}`)
-    }
+    console.log(`---------------\n[DATABASE] Status: ${mongo.STATES[mongo.connection.readyState]}`);
 
-    app.listen(port, () => {
-      console.log(`Started listening on port ${port}`)
+    app.listen(PORT, () => {
+      console.log(`[SERVER]   Status: connected\nStarted listening on PORT: ${PORT}\n---------------`)
     }
     )
+
   } catch (error) {
-    console.log(`[ERROR] Couldn't start the server! ${error}`);
+    console.log(error);
   }
 }
 
