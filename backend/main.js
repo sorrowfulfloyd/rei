@@ -28,64 +28,54 @@ app.get('/', async (req, res) => {
   }
 });
 
-// Get ALL devices from db
+// Get ALL devices from db, or lookup a single one if an id is given in the request parameters.
 app.get('/devices', async (req, res) => {
   try {
-    let devices = {};
+    const id = req.query.id;
+    let devices = {}, device;
+
+    if (id) { // if an ID is given with the params, lookup for it only, else return all the devices.
+      if (!(mongoose.Types.ObjectId.isValid(id))) {
+        return res.status(400).json({
+          Status: 400,
+          Code: "Bad request",
+          Message: `ID you've given is not valid!`,
+          id: id,
+          Parameter_List: req.query,
+        });
+      }
+
+      device = await Device.findByIdAndUpdate(id);
+      return device !== null
+        ? res.status(200).json({ device })
+        : res.status(404).json({
+          Status: 404,
+          Message: `Couldn't find any object with given data`,
+          id: id ? id : "undefined"
+        });
+    }
 
     // TODO: SORT DIFFERENT DEVICE TYPES, THEN SEND THEM.
 
     if ((await Device.find()).length > 0) {
       devices = {
         ...devices,
-        ...{ laptops: await Device.find() }
+        ...{ devices: await Device.find() }
       }
+      return res.status(200).json(devices);
+    } else {
+      return res.status(404).json({ devices: "Database is empty" });
     }
 
-    return res.status(200).json(devices);
   }
   catch (error) {
-    console.log(`[ERR] failed to fetch all devices - ${error}`)
+    console.log(`[ERR] failed to fetch devices - ${error}`)
     return res.status(500).json({
       Status: 500,
       Server_Error_Message: error.message,
     });
   }
 })
-
-// Get a device from db by id
-app.get('/devices', async (req, res) => {
-  try {
-    const id = req.query.id;
-    let device;
-
-    if (!mongoose.Types.ObjectId.isValid(id) || !(id)) {
-      return res.status(400).json({
-        Status: 400,
-        Code: "Bad request",
-        Message: `ID you've given is not valid!`,
-        id: id ? id : "undefined",
-        Parameter_List: req.query,
-      });
-    }
-
-    device = await Device.findByIdAndUpdate(id);
-    return device !== null
-      ? res.status(200).json({ device })
-      : res.status(404).json({
-        Status: 404,
-        Message: `Couldn't find any object with given data`,
-        id: id ? id : "undefined"
-      });
-
-  } catch (error) {
-    console.log(`[ERR] Couldn't fetch single device from DB. ${error}`);
-    return res.status(500).json({
-      Status: 500,
-      Message: error.message,
-    });
-  }
-});
 
 // Add a device to db
 app.post('/devices', async (req, res) => {
@@ -102,17 +92,12 @@ app.post('/devices', async (req, res) => {
     }
 
     device = new Device({ ...req.body });
-    await device.save().then(() => {
-      return res.status(200).json({
-        Message: "Success",
-        "Inserted device:": device,
-      });
-    }).catch((e) => {
-      return res.status(500).json({
-        Message: `[ERROR] Couldn't save the object -> ${e}`,
-      })
-    });
+    insertDevice = await device.save();
 
+    return res.status(200).json({
+      Message: "Success",
+      "Inserted device:": insertDevice,
+    });
 
   } catch (error) {
     return res.status(500).json({
@@ -120,7 +105,7 @@ app.post('/devices', async (req, res) => {
       Server_Error_Message: error.message,
     });
   }
-})
+});
 
 // Delete a device from db
 app.delete('/devices', async (req, res) => {
