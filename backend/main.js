@@ -8,7 +8,7 @@ const DB_ADRESS = process.env.DB_ADDRESS
 const PORT = process.env.PORT || 3000;
 let retryCountToDatabase = 0;
 
-const { Laptop, TV } = require('./models')
+const { Device } = require('./models')
 const mongoDB = mongoose.connect(DB_ADRESS);
 
 app.use(express.json());
@@ -31,26 +31,21 @@ app.get('/', async (req, res) => {
 // Get ALL devices from db
 app.get('/devices', async (req, res) => {
   try {
-    const deviceType = req.query.device_type;
-    let devices;
-    switch (deviceType) {
-      case 'laptop':
-        devices = await Laptop.find();
-        return res.status(200).json({ laptops: devices });
-      case 'tv':
-        devices = await TV.find();
-        return res.status(200).json(devices);
-      default:
-        return res.status(404).json({
-          Status: 404,
-          Error_Message: `Couldn't find any device type with the given one`,
-          deviceType: deviceType ? deviceType : "undefined",
-          Parameter_List: req.query
-        });
+    let devices = {};
+
+    // TODO: SORT DIFFERENT DEVICE TYPES, THEN SEND THEM.
+
+    if ((await Device.find()).length > 0) {
+      devices = {
+        ...devices,
+        ...{ laptops: await Device.find() }
+      }
     }
+
+    return res.status(200).json(devices);
   }
   catch (error) {
-    console.log(`[ERR] failed to fetch all devices - ${error} - device type: ${deviceType}`)
+    console.log(`[ERR] failed to fetch all devices - ${error}`)
     return res.status(500).json({
       Status: 500,
       Server_Error_Message: error.message,
@@ -59,11 +54,11 @@ app.get('/devices', async (req, res) => {
 })
 
 // Get a device from db by id
-app.get('/finddevice', async (req, res) => {
+app.get('/devices', async (req, res) => {
   try {
-    const deviceType = req.query.device_type;
     const id = req.query.id;
     let device;
+
     if (!mongoose.Types.ObjectId.isValid(id) || !(id)) {
       return res.status(400).json({
         Status: 400,
@@ -73,34 +68,15 @@ app.get('/finddevice', async (req, res) => {
         Parameter_List: req.query,
       });
     }
-    switch (deviceType) {
-      case "laptop":
-        device = await Laptop.findByIdAndUpdate(id);
-        return device !== null ? res.status(200).json({
-          status: `Object is successfully deleted`,
-          object: { device }
-        }) : res.status(404).json({
-          Status: 404,
-          Message: `Couldn't find any object with given data`,
-          id: id ? id : "undefined"
-        });
-      case "tv":
-        device = await TV.findByIdAndUpdate(id);
-        return device !== null ? res.status(200).json({
-          status: `Object is successfully deleted`,
-          object: { device }
-        }) : res.status(404).json({
-          Status: 404,
-          Message: `Couldn't find any object with given data`,
-          id: id ? id : "undefined"
-        });
-      default:
-        return res.status(404).json({
-          Status: 404,
-          Message: `Couldn't find any device type with the given one`,
-          device_type: deviceType ? deviceType : "undefined"
-        });
-    }
+
+    device = await Device.findByIdAndUpdate(id);
+    return device !== null
+      ? res.status(200).json({ device })
+      : res.status(404).json({
+        Status: 404,
+        Message: `Couldn't find any object with given data`,
+        id: id ? id : "undefined"
+      });
 
   } catch (error) {
     console.log(`[ERR] Couldn't fetch single device from DB. ${error}`);
@@ -114,9 +90,9 @@ app.get('/finddevice', async (req, res) => {
 // Add a device to db
 app.post('/devices', async (req, res) => {
   try {
-    const deviceType = req.query.device_type;
     let device;
     let insertDevice;
+
     if (Object.keys(req.body).length === 0) {
       return res.status(400).json({
         Status: 400,
@@ -124,25 +100,20 @@ app.post('/devices', async (req, res) => {
         Message: "Request body is empty"
       })
     }
-    switch (deviceType) {
-      case "laptop":
-        device = new Laptop({ ...req.body });
-        insertDevice = await device.save();
-        return res.status(200).json(insertDevice);
 
-      case "tv":
-        device = new TV({ ...req.body });
-        insertDevice = await device.save();
-        return res.status(200).json(insertDevice);
+    device = new Device({ ...req.body });
+    await device.save().then(() => {
+      return res.status(200).json({
+        Message: "Success",
+        "Inserted device:": device,
+      });
+    }).catch((e) => {
+      return res.status(500).json({
+        Message: `[ERROR] Couldn't save the object -> ${e}`,
+      })
+    });
 
-      default:
-        return res.status(400).json({
-          Status: 404,
-          Code: "Bad request",
-          Message: `Couldn't find any device type with the given one`,
-          device_type: deviceType ? deviceType : "undefined"
-        });
-    }
+
   } catch (error) {
     return res.status(500).json({
       Status: 500,
@@ -154,9 +125,9 @@ app.post('/devices', async (req, res) => {
 // Delete a device from db
 app.delete('/devices', async (req, res) => {
   try {
-    const deviceType = req.query.device_type;
     const id = req.query.id;
     let deviceToBeDeleted;
+
     if ((!mongoose.Types.ObjectId.isValid(id) || !(id))) {
       return res.status(400).json({
         Status: 400,
@@ -166,34 +137,18 @@ app.delete('/devices', async (req, res) => {
         Parameter_List: req.query,
       });
     }
-    switch (deviceType) {
-      case 'laptop':
-        deviceToBeDeleted = await Laptop.findByIdAndDelete(id);
-        return deviceToBeDeleted !== null ? res.status(200).json({
-          status: `Object is successfully deleted`,
-          object: { deviceToBeDeleted }
-        }) : res.status(404).json({
-          Status: 404,
-          Message: `Couldn't find any object with given data`,
-          id: id ? id : "undefined"
-        });
-      case 'tv':
-        deviceToBeDeleted = await TV.findByIdAndDelete(id);
-        return deviceToBeDeleted !== null ? res.status(200).json({
-          status: `Object is successfully deleted`,
-          object: { deviceToBeDeleted }
-        }) : res.status(404).json({
-          Status: 404,
-          Message: `Couldn't find any object with given data`,
-          id: id ? id : "undefined"
-        });
-      default:
-        return res.status(404).json({
-          Status: 404,
-          Message: `Couldn't find any device type with the given one`,
-          device_type: deviceType ? deviceType : "undefined"
-        });
-    }
+
+    deviceToBeDeleted = await Device.findByIdAndDelete(id);
+
+    return deviceToBeDeleted !== null ? res.status(200).json({
+      status: `Object is successfully deleted`,
+      object: { deviceToBeDeleted }
+    }) : res.status(404).json({
+      Status: 404,
+      Message: `Couldn't find any object with given data`,
+      id: id ? id : "undefined"
+    });
+
   } catch (error) {
     return res.status(500).json({
       Status: 500,
@@ -242,7 +197,7 @@ const connectToDB = async () => {
         return mongo;
       } else {
         if (retryCountToDatabase >= 10) {
-          console.log('Too many tries... Quitting the server. \n');
+          console.log('Too many tries, quitting... Check if everything is in order and try again.\n');
           process.abort();
         }
         retryCountToDatabase++;
@@ -258,7 +213,7 @@ const connectToDB = async () => {
 
 const start = async () => {
   try {
-    let mongo = await connectToDB(); // for some reason if we can't connect to db
+    let mongo = await connectToDB(); // this is here to check the connection to db
 
     console.log(`---------------\n[DATABASE] Status: ${mongo.STATES[mongo.connection.readyState]}`);
 
