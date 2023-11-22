@@ -22,6 +22,13 @@ let date = () => new Date().toLocaleString('tr-TR');
 
 // --------------
 
+const User = new Schema({
+  username: { type: String, required: true },
+  email: { type: String, required: true },
+  password: { type: String, required: true },
+  creationDate: { type: String, default: date() }
+});
+
 const DeviceSchema = new Schema({
   device_type: { type: String, required: true },
   status: { type: String, required: true, default: "ongoing" }, // this could either be ongoing, on-hold, completed, or canceled.
@@ -37,5 +44,6 @@ const DeviceSchema = new Schema({
 });
 
 const Device = mongoose.model('Device', DeviceSchema);
+const Users = mongoose.model('Users', User);
 
-module.exports = { Device };
+module.exports = { Device, Users };
