@@ -9,7 +9,7 @@
 - After a successful signup redirect the user to login page.
 */
 
-const { Users } = require('../models')
+const { Users } = require('../db/models')
 const { hashPassword, compareHashes } = require('../crypt/crypt')
 const express = require('express')
 

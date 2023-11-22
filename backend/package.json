@@ -2,10 +2,10 @@
   "name": "backend",
   "version": "1.0.0",
   "description": "",
-  "main": "main.js",
+  "main": "start.js",
   "scripts": {
-    "start": "node main.js",
-    "dev": "nodemon main.js"
+    "start": "node start.js",
+    "dev": "nodemon start.js"
   },
   "author": "",
   "license": "ISC",

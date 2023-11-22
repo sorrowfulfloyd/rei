@@ -3,15 +3,15 @@ const express = require('express');
 const mongoose = require('mongoose');
 
 const app = express();
-const authRegisterRouter = require('./auth/register')
-const authLoginRouter = require('./auth/login')
+const authRegisterRouter = require('../auth/register')
+const authLoginRouter = require('../auth/login')
 
 
 const DB_ADRESS = process.env.DB_ADDRESS
 const PORT = process.env.PORT || 3000;
 let retryCountToDatabase = 0;
 
-const { Device } = require('./models')
+const { Device } = require('../db/models')
 const mongoDB = mongoose.connect(DB_ADRESS);
 
 app.use('/auth/register', authRegisterRouter);

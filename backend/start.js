@@ -1,4 +1,4 @@
-const { PORT, connectToDB, app } = require('./app')
+const { PORT, connectToDB, app } = require('./app/app')
 
 const start = async () => {
   try {
