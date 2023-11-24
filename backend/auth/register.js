@@ -13,8 +13,9 @@
 */
 
 const { Users } = require('../db/models')
-const { hashPassword, compareHashes } = require('../crypt/crypt')
+const { hashPassword } = require('../crypt/crypt')
 const express = require('express')
+const findBy = require('./findBy')
 
 const router = express.Router();
 router.use(express.json());
@@ -45,23 +46,6 @@ router.post('/', async (req, res) => {
   }
 });
 
-const findBy = {
-  Email: async (mail) => {
-    try {
-      const data = (await Users.find({ email: mail })).length > 0 ? true : false;
-      return data;
-    } catch (error) {
-      return false;
-    }
-  },
-  Username: async (user) => {
-    try {
-      const data = (await Users.find({ username: user })).length > 0 ? true : false;
-      return data;
-    } catch (error) {
-      return false;
-    }
-  }
-};
+
 
 module.exports = router;

@@ -12,6 +12,8 @@ const PORT = process.env.PORT || 3000;
 const { Device } = require('../db/models')
 
 app.use('/auth/register', authRegisterRouter);
+app.use('/auth/login', authLoginRouter);
+
 
 app.use(express.json());
 
