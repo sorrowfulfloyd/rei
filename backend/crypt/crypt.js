@@ -36,4 +36,5 @@ const compareHashes = async (str, hash) => {
   }
 }
 
+
 module.exports = { hashPassword, compareHashes };

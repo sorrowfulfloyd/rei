@@ -6,19 +6,14 @@ const app = express();
 const authRegisterRouter = require('../auth/register')
 const authLoginRouter = require('../auth/login')
 
-
 const DB_ADRESS = process.env.DB_ADDRESS
 const PORT = process.env.PORT || 3000;
-let retryCountToDatabase = 0;
 
 const { Device } = require('../db/models')
-const mongoDB = mongoose.connect(DB_ADRESS);
 
 app.use('/auth/register', authRegisterRouter);
 
-
 app.use(express.json());
-
 
 // Default empty GET request
 app.get('/', async (req, res) => {
@@ -180,8 +175,9 @@ app.use((req, res, next) => {
 })
 
 
-
 const connectToDB = async () => {
+  const mongoDB = mongoose.connect(DB_ADRESS);
+  let retryCountToDatabase = 0;
   try {
     while (true) {
       let mongo = await mongoDB;
@@ -200,7 +196,7 @@ const connectToDB = async () => {
       }
     }
   } catch (error) {
-    console.log(`[ERROR] - Fatal error while trying to connect to MongoDB cluster. - ${error.message}`)
+    console.log(`[ERROR] - Couldn't even start the connection to  MongoDB cluster!\n- ${error.message}`)
   }
 };
 
