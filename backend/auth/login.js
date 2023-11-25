@@ -10,12 +10,21 @@
 - Don't let the user go back register/login page while they're logged in.
 */
 
-const { Users } = require('../db/models')
-const { compareHashes } = require('../crypt/crypt')
-const express = require('express')
-const findBy = require('./findBy')
+const { Users } = require('../db/models');
+const { compareHashes } = require('../crypt/crypt');
+const findBy = require('./findBy');
+
+const express = require('express');
 
 const router = express.Router();
+
+const jwt = require('jsonwebtoken');
+
+const createToken = (username) => {
+  const token = jwt.sign({ for: username }, process.env.TOKEN_KEY)
+  return token;
+}
+
 router.use(express.json());
 
 router.post('/', async (req, res) => {
@@ -30,11 +39,16 @@ router.post('/', async (req, res) => {
       let result = await compareHashes(req.body.password, user)
       switch (result) {
         case true:
-          console.log('PASSWORD IS RIGHT')
-          return res.status(200).json({ message: "Password is right" })
-        /*
-          Here means the user is successfully logged in!
-        */
+          /*
+            Here means the user is successfully logged in!
+            - Right now, we return a new token at every request, there should be a system to avoid doing that, like marking the user as logged in.
+            (Maybe in the Database)
+            - If the user is already logged in return no no.
+            - If the user is already logged in, maybe don't let them back to this page lol. (So better check if they're logged in at the beginning)
+          */
+          const token = createToken(req.body.username)
+          console.log('PASSWORD IS RIGHT, RETURNING TOKEN\n', token)
+          return res.status(200).json({ token: token })
         default:
           console.log('PASSWORD IS WRONG')
           return res.status(404).json({ message: "Wrong password" })
@@ -44,6 +58,5 @@ router.post('/', async (req, res) => {
     return res.status(400).json({ message: "Couldn't login the user!", error: error.message });
   }
 })
-
 
 module.exports = router;

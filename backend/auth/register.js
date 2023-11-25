@@ -14,8 +14,9 @@
 
 const { Users } = require('../db/models')
 const { hashPassword } = require('../crypt/crypt')
-const express = require('express')
 const findBy = require('./findBy')
+
+const express = require('express')
 
 const router = express.Router();
 router.use(express.json());
