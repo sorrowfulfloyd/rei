@@ -24,21 +24,21 @@ router.use(express.json());
 router.post('/', async (req, res) => {
   try {
     if (await findBy.Email(req.body.email)) {
-      console.log(`${req.body.email} is already taken!`)
+      console.log(`[DEBUG (register.js)] - ${req.body.email} is already taken!`)
       return res.status(400).json({ message: "[ERROR] An user with provided email is already registered!", email: req.body.email });
     } else {
       if (await findBy.Username(req.body.username)) {
-        console.log(`${req.body.username} is already taken!`)
+        console.log(`[DEBUG (register.js)] - ${req.body.username} is already taken!`)
         return res.status(400).json({ message: "[ERROR] An user with provided username is already registered!", username: req.body.username });
       } else {
-        console.log("false")
+        console.log(`[DEBUG (register.js)] - Registering the user...`)
         const userInfo = new Users({
           username: req.body.username,
           email: req.body.email,
           password: await hashPassword(req.body.password)
         });
         await userInfo.save();
-        console.log(`${userInfo}\n User has been saved successfully.`)
+        console.log(`[DEBUG (register.js)] - User has been saved successfully. ${userInfo}`)
         return res.status(200).json({ message: "User has been registered successfully.", userInfo: userInfo });
       }
     }

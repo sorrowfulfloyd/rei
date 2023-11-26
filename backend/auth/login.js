@@ -13,17 +13,12 @@
 const { Users } = require('../db/models');
 const { compareHashes } = require('../crypt/crypt');
 const findBy = require('./findBy');
+const { createToken } = require('./jwt')
 
 const express = require('express');
+const { create } = require('domain');
 
 const router = express.Router();
-
-const jwt = require('jsonwebtoken');
-
-const createToken = (username) => {
-  const token = jwt.sign({ for: username }, process.env.TOKEN_KEY)
-  return token;
-}
 
 router.use(express.json());
 
@@ -32,10 +27,15 @@ router.post('/', async (req, res) => {
   try {
     let user = await findBy.Username(req.body.username, true)
     if (!user) {
-      console.log('USER NOT FOUND')
-      res.status(404).send("User not found")
+      console.log(`[DEBUG (login.js)] - Someone tried to sign-in with an unknown username. Redirect them to register page! Username: ${req.body.username}`)
+      res.status(404).send("Invalid credentials, please sign-up first.")
     } else {
-      console.log('USER FOUND!')
+      const isSigned = await Users.findOne({ username: req.body.username })
+      if (isSigned.signedIn) {
+        console.log(`[DEBUG (login.js)] - A user that's already marked as signed-in in the database is trying to sign-in again. Blocking... Username: '${req.body.username}'`);
+        return res.status(400).json({ message: `User: ${req.body.username} is already signed in!` })
+      }
+      console.log('[DEBUG (login.js)] - Username is right, proceeding..')
       let result = await compareHashes(req.body.password, user)
       switch (result) {
         case true:
@@ -46,11 +46,12 @@ router.post('/', async (req, res) => {
             - If the user is already logged in return no no.
             - If the user is already logged in, maybe don't let them back to this page lol. (So better check if they're logged in at the beginning)
           */
-          const token = createToken(req.body.username)
-          console.log('PASSWORD IS RIGHT, RETURNING TOKEN\n', token)
+          await Users.findOneAndUpdate({ username: req.body.username }, { signedIn: true })
+          const token = createToken(req.body.username);
+          console.log('[DEBUG (login.js)] - Right password compared to hash we have and not marked as signedIn in DB, RETURNING TOKEN --> ', token)
           return res.status(200).json({ token: token })
         default:
-          console.log('PASSWORD IS WRONG')
+          console.log('[DEBUG (login.js)] - Hash comparison is failed, password given is wrong')
           return res.status(404).json({ message: "Wrong password" })
       }
     }

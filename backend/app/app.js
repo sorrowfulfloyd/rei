@@ -5,6 +5,7 @@ const mongoose = require('mongoose');
 const app = express();
 const authRegisterRouter = require('../auth/register')
 const authLoginRouter = require('../auth/login')
+const { validateToken } = require('../auth/jwt')
 
 const DB_ADRESS = process.env.DB_ADDRESS
 const PORT = process.env.PORT || 3000;
@@ -14,27 +15,24 @@ const { Device } = require('../db/models')
 app.use('/auth/register', authRegisterRouter);
 app.use('/auth/login', authLoginRouter);
 
-
 app.use(express.json());
 
 // Default empty GET request
 app.get('/', async (req, res) => {
   try {
+    if (!validateToken(req.header('token'))) { return res.status(401).json(unauthorizedAttempt) } // TODO: don't forget to change this to get cookies from browser
     console.log('GET request successful.')
     return res.send('Default GET request');
   } catch (error) {
-    console.log(`[ERR] Default GET request has failed! WOW - ${error}`)
-    return res.status(500).json({
-      Status: 500,
-      Message: error.message,
-      Message: 'Default GET request has been failed by us'
-    })
+    console.log(`[ERR] Default GET request has failed!  - ${error}`)
+    return res.status(500).json({ err: error, fromWhere: "Default GET message" })
   }
 });
 
 // Get ALL devices from db, or lookup a single one if an id is given in the request parameters.
 app.get('/devices', async (req, res) => {
   try {
+    if (!validateToken(req.header('token'))) { return res.status(401).json(unauthorizedAttempt) } // TODO: don't forget to change this to get cookies from browser
     const id = req.query.id;
     let devices = {}, device;
 
@@ -83,6 +81,7 @@ app.get('/devices', async (req, res) => {
 // Add a device to db
 app.post('/devices', async (req, res) => {
   try {
+    if (!validateToken(req.header('token'))) { return res.status(401).json(unauthorizedAttempt) } // TODO: don't forget to change this to get cookies from browser
     let device;
     let insertDevice;
 
@@ -113,6 +112,7 @@ app.post('/devices', async (req, res) => {
 // Delete a device from db
 app.delete('/devices', async (req, res) => {
   try {
+    if (!validateToken(req.header('token'))) { return res.status(401).json(unauthorizedAttempt) } // TODO: don't forget to change this to get cookies from browser
     const id = req.query.id;
     let deviceToBeDeleted;
 
@@ -147,6 +147,7 @@ app.delete('/devices', async (req, res) => {
 
 // Get server and database status
 app.use('/uptime', async (req, res) => {
+  if (!validateToken(req.header('token'))) { return res.status(401).json(unauthorizedAttempt) } // TODO: don't forget to change this to get cookies from browser
   let date = new Date();
   const health = {
     "Server Status": 'OK',
@@ -165,16 +166,10 @@ app.use('/uptime', async (req, res) => {
 })
 
 // Default message for invalid requests
-app.use((req, res, next) => {
-  res.status(400).json({
-    Status: 400,
-    "Error Message": 'Invalid or bad request!',
-    "Request parameters": req.params,
-    "Request path": req.path,
-    "Request body": req.body,
-    "Request headers": req.headers
-  })
-})
+const unauthorizedAttempt = {
+  Status: "401 - Unauthorized",
+  message: "Bad or invalid token. Make sure you're logged in before trying again. If this problem persists clear your cookies and / or contact us"
+}
 
 
 const connectToDB = async () => {
