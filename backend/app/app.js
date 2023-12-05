@@ -1,6 +1,7 @@
 require('dotenv').config();
 const express = require('express');
 const mongoose = require('mongoose');
+const cors = require('cors');
 
 const app = express();
 const authRegisterRouter = require('../auth/register')
@@ -16,11 +17,15 @@ app.use('/auth/register', authRegisterRouter);
 app.use('/auth/login', authLoginRouter);
 
 app.use(express.json());
+app.use(cors({
+  origin: 'http://127.0.0.1:5500',
+  optionsSuccessStatus: 200
+}));
 
 // Default empty GET request
-app.get('/', async (req, res) => {
+app.get('/', auth, async (req, res) => {
   try {
-    if (!validateToken(req.header('token'))) { return res.status(401).json(unauthorizedAttempt) } // TODO: don't forget to change this to get cookies from browser
+
     console.log('GET request successful.')
     return res.send('Default GET request');
   } catch (error) {
@@ -30,9 +35,8 @@ app.get('/', async (req, res) => {
 });
 
 // Get ALL devices from db, or lookup a single one if an id is given in the request parameters.
-app.get('/devices', async (req, res) => {
+app.get('/devices', auth, async (req, res) => {
   try {
-    if (!validateToken(req.header('token'))) { return res.status(401).json(unauthorizedAttempt) } // TODO: don't forget to change this to get cookies from browser
     const id = req.query.id;
     let devices = {}, device;
 
@@ -79,9 +83,8 @@ app.get('/devices', async (req, res) => {
 })
 
 // Add a device to db
-app.post('/devices', async (req, res) => {
+app.post('/devices', auth, async (req, res) => {
   try {
-    if (!validateToken(req.header('token'))) { return res.status(401).json(unauthorizedAttempt) } // TODO: don't forget to change this to get cookies from browser
     let device;
     let insertDevice;
 
@@ -110,9 +113,8 @@ app.post('/devices', async (req, res) => {
 });
 
 // Delete a device from db
-app.delete('/devices', async (req, res) => {
+app.delete('/devices', auth, async (req, res) => {
   try {
-    if (!validateToken(req.header('token'))) { return res.status(401).json(unauthorizedAttempt) } // TODO: don't forget to change this to get cookies from browser
     const id = req.query.id;
     let deviceToBeDeleted;
 
@@ -146,8 +148,7 @@ app.delete('/devices', async (req, res) => {
 })
 
 // Get server and database status
-app.use('/uptime', async (req, res) => {
-  if (!validateToken(req.header('token'))) { return res.status(401).json(unauthorizedAttempt) } // TODO: don't forget to change this to get cookies from browser
+app.use('/uptime', auth, async (req, res) => {
   let date = new Date();
   const health = {
     "Server Status": 'OK',
@@ -165,10 +166,17 @@ app.use('/uptime', async (req, res) => {
   }
 })
 
+function auth(req, res, next) {
+  if (!validateToken(req.header('token'))) { return res.status(401).json(unauthorizedAttempt) }  // TODO: don't forget to change this to get cookies from browser
+  else {
+    next();
+  }
+};
+
 // Default message for invalid requests
 const unauthorizedAttempt = {
   Status: "401 - Unauthorized",
-  message: "Bad or invalid token. Make sure you're logged in before trying again. If this problem persists clear your cookies and / or contact us"
+  message: "Bad or invalid token. Make sure you're logged in before trying again. If this problem persists clear your cookies and try again"
 }
 
 

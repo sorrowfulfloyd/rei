@@ -10,6 +10,7 @@
 - Don't let the user go back register/login page while they're logged in.
 */
 
+const cors = require('cors');
 const { Users } = require('../db/models');
 const { compareHashes } = require('../crypt/crypt');
 const findBy = require('./findBy');
@@ -21,19 +22,24 @@ const { create } = require('domain');
 const router = express.Router();
 
 router.use(express.json());
+router.use(cors({
+  origin: 'http://127.0.0.1:5500',
+  optionsSuccessStatus: 200
+}));
 
-router.post('/', async (req, res) => {
+router.post('/', cors(), async (req, res) => {
   // TODO
   try {
+    console.log('Recieved a login request!')
     let user = await findBy.Username(req.body.username, true)
     if (!user) {
       console.log(`[DEBUG (login.js)] - Someone tried to sign-in with an unknown username. Redirect them to register page! Username: ${req.body.username}`)
-      res.status(404).send("Invalid credentials, please sign-up first.")
+      res.status(404).json("Invalid credentials, please sign-up first.")
     } else {
       const isSigned = await Users.findOne({ username: req.body.username })
       if (isSigned.signedIn) {
         console.log(`[DEBUG (login.js)] - A user that's already marked as signed-in in the database is trying to sign-in again. Blocking... Username: '${req.body.username}'`);
-        return res.status(400).json({ message: `User: ${req.body.username} is already signed in!` })
+        return res.status(400).json({ status: 400, msg: `User: ${req.body.username} is already signed in!` })
       }
       console.log('[DEBUG (login.js)] - Username is right, proceeding..')
       let result = await compareHashes(req.body.password, user)
@@ -48,11 +54,11 @@ router.post('/', async (req, res) => {
           */
           await Users.findOneAndUpdate({ username: req.body.username }, { signedIn: true })
           const token = createToken(req.body.username);
-          console.log('[DEBUG (login.js)] - Right password compared to hash we have and not marked as signedIn in DB, RETURNING TOKEN --> ', token)
-          return res.status(200).json({ token: token })
+          console.log('[DEBUG (login.js)] - Right password compared to hash we have and not marked as signedIn in DB, RETURNING TOKEN --> \n', token)
+          return res.status(200).json(token);
         default:
-          console.log('[DEBUG (login.js)] - Hash comparison is failed, password given is wrong')
-          return res.status(404).json({ message: "Wrong password" })
+          console.log('[DEBUG (login.js)] - Hash comparison is failed, password given is wrong');
+          return res.status(404).json("Wrong password");
       }
     }
   } catch (error) {
