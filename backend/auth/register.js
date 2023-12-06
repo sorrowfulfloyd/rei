@@ -16,12 +16,18 @@ const { Users } = require('../db/models')
 const { hashPassword } = require('../crypt/crypt')
 const findBy = require('./findBy')
 
-const express = require('express')
+const cors = require('cors');
+const express = require('express');
 
 const router = express.Router();
-router.use(express.json());
 
-router.post('/', async (req, res) => {
+router.use(express.json());
+router.use(cors({
+  origin: 'http://127.0.0.1:5500',
+  optionsSuccessStatus: 200
+}));
+
+router.post('/', cors(), async (req, res) => {
   try {
     if (await findBy.Email(req.body.email)) {
       console.log(`[DEBUG (register.js)] - ${req.body.email} is already taken!`)
@@ -38,8 +44,8 @@ router.post('/', async (req, res) => {
           password: await hashPassword(req.body.password)
         });
         await userInfo.save();
-        console.log(`[DEBUG (register.js)] - User has been saved successfully. ${userInfo}`)
-        return res.status(200).json({ message: "User has been registered successfully.", userInfo: userInfo });
+        console.log(`[DEBUG (register.js)] - User has been saved successfully. Email: '${userInfo.email}', username: '${userInfo.username}'`)
+        return res.status(200).json({ message: "User has been registered successfully.", userInfo: [userInfo.username, userInfo.email] });
       }
     }
   } catch (error) {

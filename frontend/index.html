@@ -1,0 +1,34 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Control Panel</title>
+</head>
+
+<body>
+  <h1>Control panel</h1>
+</body>
+<script>
+  window.onload = async () => {
+    try {
+      let response = await fetch('http://localhost:3000/auth/token', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({
+          token: document.cookie.slice(6)
+        })
+      });
+      if (response.status !== 200) {
+        window.location.href = '/frontend/auth.html';
+      };
+    } catch (error) {
+      console.log(`[ERROR WHILE FETCHING] - ${error}`);
+    }
+  };
+</script>
+
+</html>

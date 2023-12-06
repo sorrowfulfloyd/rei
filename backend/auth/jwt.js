@@ -1,7 +1,6 @@
 require('dotenv').config();
 const jwt = require('jsonwebtoken');
 const KEY = process.env.TOKEN_KEY;
-const dummyToken = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJmb3IiOiJkZW5lbWUiLCJpYXQiOjE3MDEwMTQ1NTh9.YYCIM1zQBoZZw3W4--1Y3Z68rrf4n1wqpg0DzVl7ZII="
 
 /**
  * Creates a token for the given username.

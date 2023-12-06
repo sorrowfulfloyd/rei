@@ -6,6 +6,7 @@ const cors = require('cors');
 const app = express();
 const authRegisterRouter = require('../auth/register')
 const authLoginRouter = require('../auth/login')
+const authToken = require('../auth/auth')
 const { validateToken } = require('../auth/jwt')
 
 const DB_ADRESS = process.env.DB_ADDRESS
@@ -15,6 +16,7 @@ const { Device } = require('../db/models')
 
 app.use('/auth/register', authRegisterRouter);
 app.use('/auth/login', authLoginRouter);
+app.use('/auth/token', authToken);
 
 app.use(express.json());
 app.use(cors({
