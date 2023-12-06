@@ -27,9 +27,8 @@ app.use(cors({
 // Default empty GET request
 app.get('/', auth, async (req, res) => {
   try {
-
     console.log('GET request successful.')
-    return res.send('Default GET request');
+    return res.status(200).json({ message: 'Default GET request succesful' });
   } catch (error) {
     console.log(`[ERR] Default GET request has failed!  - ${error}`)
     return res.status(500).json({ err: error, fromWhere: "Default GET message" })
@@ -39,27 +38,19 @@ app.get('/', auth, async (req, res) => {
 // Get ALL devices from db, or lookup a single one if an id is given in the request parameters.
 app.get('/devices', auth, async (req, res) => {
   try {
-    const id = req.query.id;
+    const id = req.header('id');
     let devices = {}, device;
 
     if (id) { // if an ID is given with the params, lookup for it only, else return all the devices.
       if (!(mongoose.Types.ObjectId.isValid(id))) {
-        return res.status(400).json({
-          Status: 400,
-          Code: "Bad request",
-          Message: `ID you've given is not valid!`,
-          id: id,
-          Parameter_List: req.query,
-        });
+        return res.status(400).json({ message: `ID you've given is not valid!` });
       }
 
       device = await Device.findByIdAndUpdate(id);
       return device !== null
-        ? res.status(200).json({ device })
+        ? res.status(200).json({ message: device })
         : res.status(404).json({
-          Status: 404,
-          Message: `Couldn't find any object with given data`,
-          id: id ? id : "undefined"
+          message: `Couldn't find any object with given data`
         });
     }
     // TODO: SORT DIFFERENT DEVICE TYPES, THEN SEND THEM.
@@ -69,18 +60,15 @@ app.get('/devices', auth, async (req, res) => {
         ...devices,
         ...{ devices: await Device.find() }
       }
-      return res.status(200).json(devices);
+      return res.status(200).json({ message: devices });
     } else {
-      return res.status(404).json({ devices: "Database is empty" });
+      return res.status(404).json({ message: "Database is empty" });
     }
 
   }
   catch (error) {
     console.log(`[ERR] failed to fetch devices - ${error}`)
-    return res.status(500).json({
-      Status: 500,
-      Server_Error_Message: error.message,
-    });
+    return res.status(500).json({ message: error.message, });
   }
 })
 
@@ -91,26 +79,19 @@ app.post('/devices', auth, async (req, res) => {
     let insertDevice;
 
     if (Object.keys(req.body).length === 0) {
-      return res.status(400).json({
-        Status: 400,
-        Code: "Bad request",
-        Message: "Request body is empty"
-      })
+      return res.status(400).json({ message: "Request body is empty" })
     }
 
     device = new Device({ ...req.body });
     insertDevice = await device.save();
 
     return res.status(200).json({
-      Message: "Success",
-      "Inserted device:": insertDevice,
+      message: "Successfully inserted the device",
+      object: insertDevice,
     });
 
   } catch (error) {
-    return res.status(500).json({
-      Status: 500,
-      Server_Error_Message: error.message,
-    });
+    return res.status(500).json({ message: error.message });
   }
 });
 
@@ -121,31 +102,18 @@ app.delete('/devices', auth, async (req, res) => {
     let deviceToBeDeleted;
 
     if ((!mongoose.Types.ObjectId.isValid(id) || !(id))) {
-      return res.status(400).json({
-        Status: 400,
-        Code: "Bad request",
-        Message: `ID you've given is not valid!`,
-        id: id ? id : "undefined",
-        Parameter_List: req.query,
-      });
+      return res.status(400).json({ message: `ID you've given is not valid!`, });
     }
 
     deviceToBeDeleted = await Device.findByIdAndDelete(id);
 
     return deviceToBeDeleted !== null ? res.status(200).json({
-      status: `Object is successfully deleted`,
+      message: `Device is successfully deleted`,
       object: { deviceToBeDeleted }
-    }) : res.status(404).json({
-      Status: 404,
-      Message: `Couldn't find any object with given data`,
-      id: id ? id : "undefined"
-    });
+    }) : res.status(404).json({ message: `Couldn't find any object with given data` });
 
   } catch (error) {
-    return res.status(500).json({
-      Status: 500,
-      Message: error.message
-    });
+    return res.status(500).json({ message: error.message });
   }
 })
 
@@ -159,12 +127,9 @@ app.use('/uptime', auth, async (req, res) => {
     timestamp: date.toLocaleString('tr-TR'),
   }
   try {
-    res.status(200).send(health);
+    res.status(200).json({ message: health });
   } catch (error) {
-    res.status(503).json({
-      Status: 503,
-      Message: error.message
-    });
+    res.status(503).json({ message: error.message });
   }
 })
 

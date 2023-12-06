@@ -175,11 +175,9 @@
       let response = await fetch('http://localhost:3000/auth/token', {
         method: 'POST',
         headers: {
-          'Content-Type': 'application/json'
-        },
-        body: JSON.stringify({
+          'Content-Type': 'application/json',
           token: document.cookie.slice(6)
-        })
+        }
       });
 
       if (response.status == 200) {

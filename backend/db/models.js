@@ -23,24 +23,24 @@ let date = () => new Date().toLocaleString('tr-TR');
 // --------------
 
 const User = new Schema({
-  username: { type: String, required: true },
-  email: { type: String, required: true },
-  password: { type: String, required: true },
+  username: { type: String, required: true, cast: false },
+  email: { type: String, required: true, cast: false },
+  password: { type: String, required: true, cast: false },
   // signedIn: { type: Boolean },
   creationDate: { type: String, default: date() }
 });
 
 const DeviceSchema = new Schema({
-  device_type: { type: String, required: true },
-  status: { type: String, required: true, default: "ongoing" }, // this could either be ongoing, on-hold, completed, or canceled.
-  brand: { type: String, required: true, },
-  model: { type: String, required: true, },
-  problem: { type: String, required: true, },
-  accessories: { type: String, required: false, default: "Belirtilmedi", },
-  isWorking: { type: Boolean, required: true, },
-  hasWarranty: { type: Boolean, required: true, },
-  hasAdapter: { type: Boolean, required: true, },
-  technicianName: { type: String, required: true, default: 'Admin', },
+  device_type: { type: String, required: true, cast: false },
+  status: { type: String, required: true, default: "ongoing", cast: false }, // this could either be ongoing, on-hold, completed, or canceled.
+  brand: { type: String, required: true, cast: false },
+  model: { type: String, required: true, cast: false },
+  problem: { type: String, required: true, cast: false },
+  accessories: { type: String, required: false, default: "Belirtilmedi", cast: false },
+  isWorking: { type: Boolean, required: true, cast: false },
+  hasWarranty: { type: Boolean, required: true, cast: false },
+  hasAdapter: { type: Boolean, required: true, cast: false },
+  technicianName: { type: String, required: true, default: 'Admin', cast: false },
   acceptDate: { type: String, required: true, default: date(), }
 });
 

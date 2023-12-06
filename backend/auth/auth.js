@@ -14,7 +14,7 @@ router.use(cors({
 
 router.post('/', cors(), async (req, res) => {
   try {
-    if (!validateToken(req.body.token)) {
+    if (!validateToken(req.header('token'))) {
       throw new Error('');
     }
     return res.status(200).json({ message: "Token is validated" })

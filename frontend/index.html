@@ -8,19 +8,52 @@
 </head>
 
 <body>
-  <h1>Control panel</h1>
+  <h1>Admin panel</h1>
+
+  <button class="makeRequest" onclick="makeRequest()">DEFAULT GET REQUEST</button><br>
+  <button class="makeRequest" onclick="makeRequest(1)">GET ALL DEVICES</button><br>
+  <button class="makeRequest" onclick="makeRequest(2)">GET A DEVICE BY ID</button><br>
+  <button class="makeRequest" onclick="makeRequest()">ADD A DEVICE</button><br>
+  <button class="makeRequest" onclick="makeRequest()">DELETE A DEVICE</button><br>
+
+  <p class="requestMessage"></p>
 </body>
 <script>
+  const requestMessage = document.querySelector('.requestMessage');
+
+  async function makeRequest(type) {
+    switch (type) {
+      case 1:
+        requestMessage.innerHTML = JSON.stringify((await (await requestTemplate('/devices', 'GET')).json()).message.devices);
+        break;
+      case 2:
+        requestMessage.innerHTML = JSON.stringify((await (await requestTemplate('/devices', 'GET', prompt('Enter ID:', '1'))).json()).message);
+        break;
+      default:
+        requestMessage.innerHTML = (await (await requestTemplate('/', 'GET')).json()).message;
+        break;
+    }
+  };
+
+  const requestTemplate = async (path, requestType, ...id) => {
+    return response = await fetch(`http://localhost:3000${path}`, {
+      method: `${requestType}`,
+      headers: {
+        'Content-Type': 'application/json',
+        'token': document.cookie.slice(6),
+        'id': id ? id : ''
+      },
+    });
+  };
+
   window.onload = async () => {
     try {
       let response = await fetch('http://localhost:3000/auth/token', {
         method: 'POST',
         headers: {
-          'Content-Type': 'application/json'
-        },
-        body: JSON.stringify({
+          'Content-Type': 'application/json',
           token: document.cookie.slice(6)
-        })
+        }
       });
       if (response.status !== 200) {
         window.location.href = '/frontend/auth.html';
