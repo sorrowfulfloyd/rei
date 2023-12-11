@@ -4,9 +4,8 @@
   line-height: 1.5;
   font-weight: 400;
 
-  color-scheme: light dark;
-  color: #000;
-  background-color: #ffffff;
+  color: #252525;
+  background-color: #e4e4e4;
 
   font-synthesis: none;
   text-rendering: optimizeLegibility;
@@ -14,21 +13,47 @@
   -moz-osx-font-smoothing: grayscale;
 }
 
-a {
-  font-weight: 500;
-  color: #646cff;
-  text-decoration: inherit;
+:root.dark,
+:root.dark a {
+  color: #e4e4e4;
+  background-color: #252525;
+  border-color: #e4e4e4;
 }
-a:hover {
-  color: #535bf2;
+
+:root.dark button {
+  color: #000;
+  background-color: #e4e4e4;
+  border-color: darkgray;
+}
+
+:root.dark a:hover {
+  border-bottom: 2px solid #e4e4e4;
+}
+
+:root.dark button:hover {
+  border-color: black;
+}
+
+:root.dark .navbar {
+  border-color: #e4e4e4;
 }
 
 body {
   margin: 0;
   display: flex;
-  place-items: center;
-  min-width: 320px;
+  /* place-items: center; */
+  min-width: 360px;
   min-height: 100vh;
+}
+
+a {
+  font-weight: 500;
+  color: #000000;
+  text-decoration: inherit;
+  cursor: pointer;
+}
+a:hover {
+  border-bottom: 2px solid black;
 }
 
 h1 {
@@ -37,33 +62,76 @@ h1 {
 }
 
 button {
-  border-radius: 5px;
-  border: 2px solid transparent;
+  border-radius: 8px;
   padding: 0.6em 1.2em;
   font-size: 1em;
   font-weight: 550;
   font-family: inherit;
-  background-color: #1a1a1a;
+  background-color: #000000;
+  color: #fff;
+  border-color: black;
   cursor: pointer;
-  transition: border-color 0.25s;
 }
 button:hover {
-  border-color: rgb(87, 86, 87);
+  border-color: rgb(255, 255, 255);
 }
 button:focus,
 button:focus-visible {
   outline: 4px auto -webkit-focus-ring-color;
 }
 
-@media (prefers-color-scheme: light) {
-  :root {
-    color: #213547;
-    background-color: #ffffff;
+@media (max-width: 767px) {
+  #root {
+    padding: 0.5vw;
+    margin: 1vw;
   }
-  a:hover {
-    color: #747bff;
+  .navbar {
+    border-bottom: 1px solid black;
+  }
+  .card {
+    padding: 5vw;
+    margin: 5vw;
+  }
+  .left {
+    column-gap: 5%;
+    padding-left: 0;
+  }
+  .right {
+    column-gap: 5%;
+    min-width: 10%;
+    padding-right: 7px;
+  }
+  a {
+    font-size: 0.95rem;
+  }
+  h1 {
+    font-size: 2.2rem;
+  }
+  p {
+    font-size: 0.9rem;
   }
   button {
-    background-color: #f9f9f9;
+    font-size: 0.95rem;
+  }
+  .left a {
+    padding-right: 5px;
+    border-right: 0.5px solid black;
+  }
+  .right a {
+    padding-left: 5px;
+    border-left: 0.5px solid black;
+  }
+}
+@media (max-width: 389px) {
+  .right {
+    min-width: 22%;
+  }
+  .left a {
+    padding-right: 1px;
+    border-right: none;
+  }
+  .right a {
+    padding-left: 1px;
+    border-left: none;
   }
 }

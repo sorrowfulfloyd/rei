@@ -1,0 +1,45 @@
+.navbar {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  margin: 0 auto;
+  border-bottom: 2px solid black;
+  font-size: 1.15rem;
+  min-width: 360px;
+}
+
+.left {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-end;
+  column-gap: 2%;
+  padding: 0 0 0 10px;
+  min-width: 30%;
+}
+
+.left a {
+  border-right: 3px solid black;
+  padding-right: 10px;
+}
+
+.right a {
+  border-left: 3px solid black;
+  padding-left: 10px;
+}
+
+.right {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-end;
+  align-self: flex-end;
+  padding: 0 10px 0 0;
+  column-gap: 2%;
+  min-width: 10%;
+}
+
+#logo {
+  background-image: url("ico/favicon-32x32.png");
+  min-width: 32px;
+  min-height: 32px;
+  cursor: pointer;
+}
