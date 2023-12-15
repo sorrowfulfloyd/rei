@@ -2,7 +2,7 @@
   display: flex;
   align-items: flex-start;
   justify-content: space-between;
-  margin: 0 auto;
+  margin: 0.5vw;
   border-bottom: 2px solid black;
   font-size: 1.15rem;
   min-width: 360px;
@@ -15,6 +15,7 @@
   column-gap: 2%;
   padding: 0 0 0 10px;
   min-width: 30%;
+  border-left: 2px solid black;
 }
 
 .left a {
@@ -35,6 +36,7 @@
   padding: 0 10px 0 0;
   column-gap: 2%;
   min-width: 10%;
+  border-right: 2px solid black;
 }
 
 #logo {

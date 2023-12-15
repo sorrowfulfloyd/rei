@@ -32,15 +32,19 @@ const User = new Schema({
 
 const DeviceSchema = new Schema({
   device_type: { type: String, required: true, cast: false },
-  status: { type: String, required: true, default: "ongoing", cast: false }, // this could either be ongoing, on-hold, completed, or canceled.
+  status: { type: String, default: "ongoing", cast: false },
   brand: { type: String, required: true, cast: false },
   model: { type: String, required: true, cast: false },
   problem: { type: String, required: true, cast: false },
-  accessories: { type: String, required: false, default: "Belirtilmedi", cast: false },
+  accessories: { type: String, required: false, default: "", cast: false },
+  note: { type: String, required: false, default: "", cast: false },
   isWorking: { type: Boolean, required: true, cast: false },
   hasWarranty: { type: Boolean, required: true, cast: false },
-  hasAdapter: { type: Boolean, required: true, cast: false },
-  technicianName: { type: String, required: true, default: 'Admin', cast: false },
+  customerName: { type: String, required: true, cast: false },
+  customerPhone: { type: String, required: true, cast: false },
+  notif: { type: Boolean, required: true, default: false, cast: false },
+  ads: { type: Boolean, required: true, default: false, cast: false },
+  technicianName: { type: String, default: 'Admin', cast: false },
   acceptDate: { type: String, required: true, default: date(), }
 });
 

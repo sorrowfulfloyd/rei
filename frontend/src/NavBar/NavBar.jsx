@@ -2,7 +2,6 @@ import "./NavBar.css";
 
 export default function NavBar() {
   return (
-    // TODO: Make those drop-down
     <div className="navbar">
       <div className="left">
         <img src="" alt="" id="logo" />

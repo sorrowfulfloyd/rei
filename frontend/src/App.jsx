@@ -1,6 +1,9 @@
 import { useState } from "react";
+import NavBar from "./NavBar/NavBar";
+import Footer from "./Footer/Footer";
+import Banner from "./Banner/Banner";
+// import AddDevice from "./AddDevice/AddDevice";
 import "./App.css";
-import NavBar from "./navbar/NavBar";
 
 function App() {
   const [count, setCount] = useState(5);
@@ -8,38 +11,10 @@ function App() {
   return (
     <>
       <NavBar />
+      <Banner />
       <div className="card">
         <h1>We cool?</h1>
-        <p>
-          Lorem ipsum dolor, sit amet consectetur adipisicing elit. Quas commodi
-          aut exercitationem voluptatum, voluptate quaerat nisi placeat
-          quibusdam qui praesentium! Labore eligendi nam cum. Tempora aliquam
-          natus sint quia suscipit.
-        </p>
-        <p>
-          Lorem ipsum dolor sit amet consectetur adipisicing elit. Optio quos
-          inventore laboriosam assumenda ullam rem ut, iusto corrupti obcaecati,
-          cupiditate aperiam sapiente velit exercitationem autem labore officiis
-          similique voluptatem qui?
-        </p>
-        <p>
-          Lorem ipsum dolor sit amet consectetur adipisicing elit. Optio quos
-          inventore laboriosam assumenda ullam rem ut, iusto corrupti obcaecati,
-          cupiditate aperiam sapiente velit exercitationem autem labore officiis
-          similique voluptatem qui?
-        </p>
-        <p>
-          Lorem ipsum dolor sit amet consectetur adipisicing elit. Optio quos
-          inventore laboriosam assumenda ullam rem ut, iusto corrupti obcaecati,
-          cupiditate aperiam sapiente velit exercitationem autem labore officiis
-          similique voluptatem qui?
-        </p>
-        <p>
-          Lorem ipsum dolor sit amet consectetur adipisicing elit. Optio quos
-          inventore laboriosam assumenda ullam rem ut, iusto corrupti obcaecati,
-          cupiditate aperiam sapiente velit exercitationem autem labore officiis
-          similique voluptatem qui?
-        </p>
+
         <p>
           Lorem ipsum dolor sit amet consectetur adipisicing elit. Optio quos
           inventore laboriosam assumenda ullam rem ut, iusto corrupti obcaecati,
@@ -56,6 +31,7 @@ function App() {
           We cool. {count}
         </button>
       </div>
+      <Footer />
     </>
   );
 }

@@ -1,0 +1,21 @@
+.footer {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  border-top: 2px solid black;
+  padding: 0.2vw;
+  margin: auto 0.1vh 0 0.1vh;
+}
+
+.version p {
+  padding-right: 1vh;
+}
+
+.mySocials a {
+  display: block;
+  margin-block-start: 1em;
+  margin-block-end: 1em;
+  margin-inline-start: 0px;
+  margin-inline-end: 0px;
+  padding-left: 1vh;
+}

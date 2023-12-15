@@ -34,16 +34,26 @@
   border-color: black;
 }
 
-:root.dark .navbar {
+:root.dark button:active {
+  background: #cacaca;
+  -webkit-box-shadow: inset 0px 0px 5px #4e4e4e;
+  -moz-box-shadow: inset 0px 0px 5px #4e4e4e;
+  box-shadow: inset 0px 0px 5px #4e4e4e;
+  outline: none;
+}
+
+:root.dark .navbar,
+:root.dark .footer {
   border-color: #e4e4e4;
+}
+
+:root.dark .container {
+  background-color: #252525;
+  border: 1px solid gray;
 }
 
 body {
   margin: 0;
-  display: flex;
-  /* place-items: center; */
-  min-width: 360px;
-  min-height: 100vh;
 }
 
 a {
@@ -62,28 +72,30 @@ h1 {
 }
 
 button {
-  border-radius: 8px;
+  border-radius: 3px;
   padding: 0.6em 1.2em;
   font-size: 1em;
   font-weight: 550;
   font-family: inherit;
-  background-color: #000000;
+  background-color: #1a1a1a;
   color: #fff;
-  border-color: black;
   cursor: pointer;
+  box-shadow: 3px 5px #ff7e7e;
+  border: none;
 }
 button:hover {
-  border-color: rgb(255, 255, 255);
+  box-shadow: 4px 6px palevioletred;
 }
-button:focus,
-button:focus-visible {
-  outline: 4px auto -webkit-focus-ring-color;
+
+button:active {
+  background: #2c2c2c;
+  -webkit-box-shadow: 2px 4px palegoldenrod;
+  -moz-box-shadow: 2px 4px palegoldenrod;
+  box-shadow: 2px 4px rgb(255, 132, 208);
 }
 
 @media (max-width: 767px) {
   #root {
-    padding: 0.5vw;
-    margin: 1vw;
   }
   .navbar {
     border-bottom: 1px solid black;
@@ -92,17 +104,24 @@ button:focus-visible {
     padding: 5vw;
     margin: 5vw;
   }
+  .footer {
+    border-top: 1px solid black;
+    padding: 0vw;
+    margin-top: auto;
+  }
   .left {
     column-gap: 5%;
     padding-left: 0;
+    border-left: none;
   }
   .right {
     column-gap: 5%;
     min-width: 10%;
     padding-right: 7px;
+    border-right: 1px solid black;
   }
   a {
-    font-size: 0.95rem;
+    font-size: 0.9rem;
   }
   h1 {
     font-size: 2.2rem;
@@ -126,6 +145,10 @@ button:focus-visible {
   .right {
     min-width: 22%;
   }
+  .left,
+  .right {
+    border: none;
+  }
   .left a {
     padding-right: 1px;
     border-right: none;
@@ -133,5 +156,12 @@ button:focus-visible {
   .right a {
     padding-left: 1px;
     border-left: none;
+  }
+  .card {
+    padding: 8vw;
+    margin: 2.5vw;
+  }
+  .footer {
+    margin: auto 0 0 0;
   }
 }

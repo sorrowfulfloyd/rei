@@ -19,10 +19,10 @@ app.use('/auth/login', authLoginRouter);
 app.use('/auth/token', authToken);
 
 app.use(express.json());
-app.use(cors({
-  origin: 'http://127.0.0.1:5500',
-  optionsSuccessStatus: 200
-}));
+app.use(cors());
+
+// How can I make all the requests use cors by default?
+
 
 // Default empty GET request
 app.get('/', auth, async (req, res) => {
@@ -73,7 +73,7 @@ app.get('/devices', auth, async (req, res) => {
 })
 
 // Add a device to db
-app.post('/devices', auth, async (req, res) => {
+app.post('/devices', async (req, res) => {
   try {
     let device;
     let insertDevice;
@@ -84,7 +84,7 @@ app.post('/devices', auth, async (req, res) => {
 
     device = new Device({ ...req.body });
     insertDevice = await device.save();
-
+    console.log('SUCCESSFULLY INSERTED A DEVICE')
     return res.status(200).json({
       message: "Successfully inserted the device",
       object: insertDevice,
