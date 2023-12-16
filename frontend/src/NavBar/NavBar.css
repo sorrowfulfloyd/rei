@@ -13,29 +13,21 @@
   justify-content: space-between;
   align-items: flex-end;
   column-gap: 2%;
-  padding: 0 0 0 10px;
-  min-width: 30%;
+  padding: 0 10px;
   border-left: 2px solid black;
 }
 
-.left a {
-  border-right: 3px solid black;
-  padding-right: 10px;
-}
-
 .right a {
-  border-left: 3px solid black;
+  border-left: 2px solid black;
   padding-left: 10px;
 }
 
 .right {
   display: flex;
-  justify-content: space-between;
+  justify-content: flex-end;
   align-items: flex-end;
   align-self: flex-end;
-  padding: 0 10px 0 0;
-  column-gap: 2%;
-  min-width: 10%;
+  padding: 0 10px;
   border-right: 2px solid black;
 }
 

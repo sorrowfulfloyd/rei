@@ -1,8 +1,17 @@
 import "./AddDevice.css";
 
-export default function AddDevice() {
+export default function AddDevice({ hideAddDevice }) {
   return (
     <form action="POST" id="addDeviceForm" onSubmit={POSTdevice}>
+      <button
+        id="close"
+        onClick={(e) => {
+          hideAddDevice();
+          e.preventDefault();
+        }}
+      >
+        X
+      </button>
       <h1>Add a device</h1>
       <div id="container">
         <span id="deviceInfo">
@@ -80,7 +89,7 @@ export default function AddDevice() {
         </div>
       </div>
       <button type="submit" form="addDeviceForm">
-        Submit
+        SUBMIT
       </button>
     </form>
   );

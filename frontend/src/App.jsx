@@ -2,16 +2,38 @@ import { useState } from "react";
 import NavBar from "./NavBar/NavBar";
 import Footer from "./Footer/Footer";
 import Banner from "./Banner/Banner";
-// import AddDevice from "./AddDevice/AddDevice";
+import AddDevice from "./AddDevice/AddDevice";
+import ListAllDevices from "./ListAllDevices/ListAllDevices";
 import "./App.css";
 
 function App() {
-  const [count, setCount] = useState(5);
+  const [isAddDeviceVisible, setAddDeviceVisibility] = useState(false);
+
+  const toggleAddDevice = () => {
+    setAddDeviceVisibility((prev) => !prev);
+    setAllDevicesVisibility(false);
+  };
+
+  const [isAllDevicesVisible, setAllDevicesVisibility] = useState(false);
+
+  const toggleAllDevices = () => {
+    setAllDevicesVisibility((prev) => !prev);
+    setAddDeviceVisibility(false);
+  };
 
   return (
     <>
       <NavBar />
-      <Banner />
+      <Banner
+        showAddDevice={toggleAddDevice}
+        showAllDevices={toggleAllDevices}
+      />
+      {isAddDeviceVisible && (
+        <AddDevice hideAddDevice={setAddDeviceVisibility} />
+      )}
+      {isAllDevicesVisible && (
+        <ListAllDevices hideAllDevices={setAllDevicesVisibility} />
+      )}
       <div className="card">
         <h1>We cool?</h1>
 
@@ -21,15 +43,7 @@ function App() {
           cupiditate aperiam sapiente velit exercitationem autem labore officiis
           similique voluptatem qui?
         </p>
-        <button
-          onClick={() => {
-            count > 1
-              ? setCount((count) => --count)
-              : setCount((count) => (count += 4));
-          }}
-        >
-          We cool. {count}
-        </button>
+        <button>We cool.</button>
       </div>
       <Footer />
     </>
