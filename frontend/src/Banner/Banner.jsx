@@ -1,6 +1,10 @@
 import "./Banner.css";
 
-export default function Banner({ showAddDevice, showAllDevices }) {
+export default function Banner({
+  showAddDevice,
+  showAllDevices,
+  showCustomers,
+}) {
   return (
     <div className="container">
       <div className="welcome">
@@ -21,7 +25,13 @@ export default function Banner({ showAddDevice, showAllDevices }) {
         >
           List all devices
         </button>
-        <button>List all customers</button>
+        <button
+          onClick={() => {
+            showCustomers();
+          }}
+        >
+          List all customers
+        </button>
       </div>
     </div>
   );

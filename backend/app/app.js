@@ -25,7 +25,7 @@ app.use(cors());
 
 
 // Default empty GET request
-app.get('/', auth, async (req, res) => {
+app.get('/', async (req, res) => {
   try {
     console.log('GET request successful.')
     return res.status(200).json({ message: 'Default GET request succesful' });
@@ -36,7 +36,7 @@ app.get('/', auth, async (req, res) => {
 });
 
 // Get ALL devices from db, or lookup a single one if an id is given in the request parameters.
-app.get('/devices', auth, async (req, res) => {
+app.get('/devices', async (req, res) => {
   try {
     const id = req.header('id');
     let devices = {}, device;
@@ -60,7 +60,7 @@ app.get('/devices', auth, async (req, res) => {
         ...devices,
         ...{ devices: await Device.find() }
       }
-      return res.status(200).json({ message: devices });
+      return res.status(200).json(devices);
     } else {
       return res.status(404).json({ message: "Database is empty" });
     }
@@ -96,7 +96,7 @@ app.post('/devices', async (req, res) => {
 });
 
 // Delete a device from db
-app.delete('/devices', auth, async (req, res) => {
+app.delete('/devices', async (req, res) => {
   try {
     const id = req.query.id;
     let deviceToBeDeleted;
@@ -118,7 +118,7 @@ app.delete('/devices', auth, async (req, res) => {
 })
 
 // Get server and database status
-app.use('/uptime', auth, async (req, res) => {
+app.use('/uptime', async (req, res) => {
   let date = new Date();
   const health = {
     "Server Status": 'OK',

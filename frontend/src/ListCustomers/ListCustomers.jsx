@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
-import "./ListAllDevices.css";
+import "./ListCustomers.css";
 
-export default function ListAllDevices() {
+export default function Customers() {
   const [result, setResult] = useState(false);
   const [devices, setDevices] = useState();
 
@@ -36,42 +36,28 @@ export default function ListAllDevices() {
   }, []);
 
   const renderRows = () => {
+    // TODO FILTER
+
     return devices.map((device) => (
       <tr key={device._id}>
-        <td>{device.device_type}</td>
-        <td>{device.status}</td>
-        <td>{device.brand}</td>
-        <td>{device.model}</td>
-        <td>{device.accessories}</td>
-        <td>{device.problem}</td>
-        <td>{device.note}</td>
-        <td>{device.isWorking ? "Yes" : "No"}</td>
-        <td>{device.hasWarranty ? "Yes" : "No"}</td>
-        <td>{device.notif ? "Yes" : "No"}</td>
-        <td>{device.ads ? "Yes" : "No"}</td>
+        <td>{device.customerName}</td>
+        <td>{device.customerPhone}</td>
         <td>{device.acceptDate}</td>
+        <td>{}</td>
       </tr>
     ));
   };
 
   return (
-    <div id="containerx">
+    <div id="containery">
       {result ? (
         <table>
           <thead>
             <tr>
-              <th>Device Type</th>
-              <th>Status</th>
-              <th>Brand</th>
-              <th>Model</th>
-              <th>Accessories</th>
-              <th>Problem</th>
-              <th>Additional Notes</th>
-              <th>Was it working?</th>
-              <th>Has Warranty?</th>
-              <th>Wants Notifications?</th>
-              <th>Wants Promotions?</th>
+              <th>Name</th>
+              <th>Number</th>
               <th>Accept Date</th>
+              <th>Number of devices we have of them</th>
             </tr>
           </thead>
           <tbody id="deviceList">{renderRows()}</tbody>
