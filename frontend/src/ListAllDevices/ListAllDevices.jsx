@@ -2,8 +2,9 @@ import { useEffect, useState } from "react";
 import "./ListAllDevices.css";
 
 export default function ListAllDevices() {
-  const [result, setResult] = useState(false);
-  const [devices, setDevices] = useState();
+  const [data, setData] = useState(null);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
 
   useEffect(() => {
     fetch("http://localhost:3000/devices", {
@@ -13,30 +14,28 @@ export default function ListAllDevices() {
         token: document.cookie.slice(6),
       },
     })
-      .then((response) => {
-        if (response.status === 200) {
-          response
-            .json()
-            .then((result) => {
-              setDevices(result.devices);
-              console.table(result.devices);
-              setResult(true);
-            })
-            .catch((err) => {
-              setResult(`ERROR1: ${err}`);
-            });
-        } else {
-          setResult(`Error!  ${response.status} - ${response.body}`);
-        }
-      })
-      .catch((error) => {
-        console.log(error);
-        setResult(`ERROR! -> ${error}`);
-      });
-  }, []);
-
-  const renderRows = () => {
-    return devices.map((device) => (
+    .then((response) => {
+      if (response.ok) {
+        setError(null);
+        console.log(response);
+        return response.json();
+      }
+      throw response;
+    })
+    .then(actualData => {
+      setData(actualData.devices);
+      console.log(actualData.devices)
+    })
+    .catch(err =>  {
+      setError(err);
+    })
+    .finally(() => {
+      setLoading(false);
+    })
+    },[]);
+  
+  const renderData = () => {
+    return data.map((device) => (
       <tr key={device._id}>
         <td>{device.device_type}</td>
         <td>{device.status}</td>
@@ -51,34 +50,36 @@ export default function ListAllDevices() {
         <td>{device.ads ? "Yes" : "No"}</td>
         <td>{device.acceptDate}</td>
       </tr>
-    ));
+    ))
   };
 
   return (
     <div id="containerx">
-      {result ? (
-        <table>
-          <thead>
-            <tr>
-              <th>Device Type</th>
-              <th>Status</th>
-              <th>Brand</th>
-              <th>Model</th>
-              <th>Accessories</th>
-              <th>Problem</th>
-              <th>Additional Notes</th>
-              <th>Was it working?</th>
-              <th>Has Warranty?</th>
-              <th>Wants Notifications?</th>
-              <th>Wants Promotions?</th>
-              <th>Accept Date</th>
-            </tr>
-          </thead>
-          <tbody id="deviceList">{renderRows()}</tbody>
-        </table>
-      ) : (
-        "Loading..."
-      )}
+      {loading ? <p>Loading...</p>
+        : (<table>
+            <thead>
+              <tr>
+                <th>Device Type</th>
+                <th>Status</th>
+                <th>Brand</th>
+                <th>Model</th>
+                <th>Accessories</th>
+                <th>Problem</th>
+                <th>Additional Notes</th>
+                <th>Was it working?</th>
+                <th>Has Warranty?</th>
+                <th>Wants Notifications?</th>
+                <th>Wants Promotions?</th>
+                <th>Accept Date</th>
+              </tr>
+            </thead>
+            {error && <p>{`There was a problem with fetching the data - ${error}`}</p>}
+            {data && <tbody id="deviceList">
+              {renderData()}
+            </tbody>}
+        </table>)
+      }
     </div>
   );
 }
+

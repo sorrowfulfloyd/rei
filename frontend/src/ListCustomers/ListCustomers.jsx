@@ -2,8 +2,9 @@ import { useEffect, useState } from "react";
 import "./ListCustomers.css";
 
 export default function Customers() {
-  const [result, setResult] = useState(false);
-  const [devices, setDevices] = useState();
+  const [data, setData] = useState(null);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null)
 
   useEffect(() => {
     fetch("http://localhost:3000/devices", {
@@ -14,56 +15,53 @@ export default function Customers() {
       },
     })
       .then((response) => {
-        if (response.status === 200) {
-          response
-            .json()
-            .then((result) => {
-              setDevices(result.devices);
-              console.table(result.devices);
-              setResult(true);
-            })
-            .catch((err) => {
-              setResult(`ERROR1: ${err}`);
-            });
-        } else {
-          setResult(`Error!  ${response.status} - ${response.body}`);
+        if(response.ok) {
+         setError(null)
+         console.log(response)
+         return response.json();
         }
+        throw response;
       })
-      .catch((error) => {
-        console.log(error);
-        setResult(`ERROR! -> ${error}`);
-      });
+      .then(actualData => {
+        setData(actualData.devices);
+        console.log(actualData.devices);
+      })
+      .catch(err => {
+        setError(err);
+      })
+      .finally(() => {
+        setLoading(false)
+      })
   }, []);
 
-  const renderRows = () => {
-    // TODO FILTER
-
-    return devices.map((device) => (
+  const renderData = () => {
+    return data.map((device) => (
       <tr key={device._id}>
         <td>{device.customerName}</td>
         <td>{device.customerPhone}</td>
         <td>{device.acceptDate}</td>
         <td>{}</td>
       </tr>
-    ));
+      ))
   };
 
   return (
     <div id="containery">
-      {result ? (
-        <table>
+      {loading ? <p>Loading...</p>
+        : (<table>
           <thead>
             <tr>
               <th>Name</th>
               <th>Number</th>
               <th>Accept Date</th>
-              <th>Number of devices we have of them</th>
+              <th># of Devices</th>
             </tr>
           </thead>
-          <tbody id="deviceList">{renderRows()}</tbody>
+          {error && <p>{`There was a problem with fetching the data - ${error}`}</p>}
+          {data && <tbody id="deviceList">
+            {renderData()}
+          </tbody>}
         </table>
-      ) : (
-        "Loading..."
       )}
     </div>
   );

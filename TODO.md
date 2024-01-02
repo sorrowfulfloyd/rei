@@ -10,8 +10,6 @@
 
 - [x] Check out CORS in order to only allow our website(admin panel/costumer UI) to fetch data.
 
-### Frontend Goals
-
 ### Security Goals
 
 - [ ] Check on generating the cookie on Express and sending it automatically.
