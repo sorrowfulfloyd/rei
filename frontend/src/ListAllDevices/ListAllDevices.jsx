@@ -1,6 +1,8 @@
 import { useEffect, useState } from "react";
 import "./ListAllDevices.css";
 
+import UpdateDevice from "../UpdateDocuments/UpdateDevice";
+
 export default function ListAllDevices() {
 	const [data, setData] = useState(null);
 	const [loading, setLoading] = useState(true);
@@ -9,6 +11,18 @@ export default function ListAllDevices() {
 	const [documentCount, setDocumentCount] = useState();
 	const [currentPage, setCurrentPage] = useState(1);
 	const [totalPages, setTotalPages] = useState();
+	const [modal, setModal] = useState(false);
+	const [activeDeviceId, setActiveDeviceId] = useState();
+
+	if (modal) {
+		document.body.classList.add("active-modal");
+	} else {
+		document.body.classList.remove("active-modal");
+	}
+
+	const hideModal = () => {
+		setModal(!modal);
+	};
 
 	useEffect(() => {
 		if (limitIndex && currentPage) {
@@ -51,7 +65,7 @@ export default function ListAllDevices() {
 
 	const renderData = () => {
 		return data.map((device) => (
-			<tr key={device._id}>
+			<tr key={device._id} id={device._id}>
 				<td>{device.device_type}</td>
 				<td>{device.status}</td>
 				<td>{device.brand}</td>
@@ -62,6 +76,14 @@ export default function ListAllDevices() {
 				<td>{device.isWorking ? "Yes" : "No"}</td>
 				<td>{device.hasWarranty ? "Yes" : "No"}</td>
 				<td>{device.acceptDate}</td>
+				<button
+					onClick={() => {
+						setModal(!modal);
+						setActiveDeviceId(device._id);
+					}}
+				>
+					Edit
+				</button>
 			</tr>
 		));
 	};
@@ -127,6 +149,9 @@ export default function ListAllDevices() {
 						)}
 						{data && <tbody id="deviceList">{renderData()}</tbody>}
 					</table>
+					{modal && (
+						<UpdateDevice toggleModal={hideModal} device={activeDeviceId} />
+					)}
 				</>
 			)}
 		</div>
