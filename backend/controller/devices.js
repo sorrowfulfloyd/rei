@@ -67,12 +67,4 @@ const deleteDevice = async (req, res) => {
   }) : res.status(404).json({ message: `Couldn't find any object with given data` });
 }
 
-const addCustomer = async (req, res) => {
-
-  const device = new Customer({ ...req.body });
-  const insertDevice = await device.save();
-
-  return res.status(200).json({ object: insertDevice });
-}
-
-module.exports = { getDevices, addDevice, deleteDevice, addCustomer }
+module.exports = { getDevices, addDevice, deleteDevice }

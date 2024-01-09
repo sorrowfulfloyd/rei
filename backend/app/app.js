@@ -7,6 +7,7 @@ require('express-async-errors')
 const { validateToken } = require('../auth/jwt')
 
 const deviceRoute = require('../routes/devices')
+const customerRoute = require('../routes/customers.js')
 const authRoute = require('../routes/auth.js')
 const errorHandler = require('../middleware/errorHandler.js')
 const notFound = require('../middleware/notFound.js')
@@ -15,8 +16,9 @@ const notFound = require('../middleware/notFound.js')
 app.use(express.json());
 app.use(cors());
 
-app.use('/auth', authRoute);
 app.use('/devices', deviceRoute);
+app.use('/customers', customerRoute);
+app.use('/auth', authRoute);
 app.use(errorHandler);
 app.use(notFound);
 
