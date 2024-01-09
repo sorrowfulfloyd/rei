@@ -104,29 +104,37 @@ function POSTdevice(e) {
       token: document.cookie.slice(6),
     },
     body: JSON.stringify({
-      device_type: document.forms["addDeviceForm"]["deviceType"].value,
-      brand: document.forms["addDeviceForm"]["make"].value,
-      model: document.forms["addDeviceForm"]["model"].value,
-      problem: document.forms["addDeviceForm"]["problem"].value,
-      accessories: document.forms["addDeviceForm"]["accessories"].value,
-      note: document.forms["addDeviceForm"]["note"].value,
-      isWorking: document.forms["addDeviceForm"]["workingRadio"].checked,
-      hasWarranty: document.forms["addDeviceForm"]["warrantyRadio"].checked,
-      customerName: document.forms["addDeviceForm"]["customerName"].value,
-      customerPhone: document.forms["addDeviceForm"]["customerPhone"].value,
-      notif: document.forms["addDeviceForm"]["wantNotif"].checked,
-      ads: document.forms["addDeviceForm"]["wantAds"].checked,
-    }),
+      deviceInfo: {
+        device_type: document.forms["addDeviceForm"]["deviceType"].value,
+        brand: document.forms["addDeviceForm"]["make"].value,
+        model: document.forms["addDeviceForm"]["model"].value,
+        problem: document.forms["addDeviceForm"]["problem"].value,
+        accessories: document.forms["addDeviceForm"]["accessories"].value,
+        note: document.forms["addDeviceForm"]["note"].value,
+        isWorking: document.forms["addDeviceForm"]["workingRadio"].checked,
+        hasWarranty: document.forms["addDeviceForm"]["warrantyRadio"].checked,
+      },
+      customerInfo: {
+        name: document.forms["addDeviceForm"]["customerName"].value,
+        phone: document.forms["addDeviceForm"]["customerPhone"].value,
+        notif: document.forms["addDeviceForm"]["wantNotif"].checked,
+        ads: document.forms["addDeviceForm"]["wantAds"].checked,
+      }
+    })
   })
     .then((response) => {
       if (response.status === 200) {
         alert("Device added");
         document.forms["addDeviceForm"].reset();
+        return response.json();
       } else {
         alert(
           `Something went wrong\n${response.status} - ${response.statusText}`
         );
       }
+    })
+    .then(data => {
+      console.log(data) // for debug - delete this later
     })
     .catch((error) => {
       console.log(error);

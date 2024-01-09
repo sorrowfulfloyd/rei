@@ -7,7 +7,7 @@ export default function Customers() {
   const [error, setError] = useState(null)
 
   useEffect(() => {
-    fetch("http://localhost:3000/devices", {
+    fetch("http://localhost:3000/customers", {
       method: "GET",
       headers: {
         "Content-Type": "application/json",
@@ -23,8 +23,8 @@ export default function Customers() {
         throw response;
       })
       .then(actualData => {
-        setData(actualData.devices);
-        console.log(actualData.devices);
+        setData(actualData.customers);
+        console.log(actualData.customers);
       })
       .catch(err => {
         setError(err);
@@ -37,9 +37,10 @@ export default function Customers() {
   const renderData = () => {
     return data.map((device) => (
       <tr key={device._id}>
-        <td>{device.customerName}</td>
-        <td>{device.customerPhone}</td>
-        <td>{device.acceptDate}</td>
+        <td>{device._id}</td>
+        <td>{device.name}</td>
+        <td>{device.phone}</td>
+        <td>{device.devices.length}</td>
         <td>{}</td>
       </tr>
     ))
@@ -51,10 +52,10 @@ export default function Customers() {
         : (<table>
           <thead>
             <tr>
-              <th>Name</th>
-              <th>Number</th>
-              <th>Accept Date</th>
-              <th># of Devices</th>
+              <th>document id (DEBUG)</th>
+              <th>Customer Name</th>
+              <th>Phone Number</th>
+              <th>Number of Devices</th>
             </tr>
           </thead>
           {error && <p>{`There was a problem with fetching the data - ${error}`}</p>}
