@@ -4,7 +4,6 @@ const Customer = require('../models/customers')
 
 const getDevices = async (req, res) => {
   const id = req.query.id;
-  let devices = {};
   let device;
 
   if (id) {
@@ -20,14 +19,14 @@ const getDevices = async (req, res) => {
       });
   }
 
-  if ((await Device.find()).length > 0) {
-    devices = {
-      ...devices,
-      ...{ devices: await Device.find() }
-    }
-    return res.status(200).json(devices);
-  }
-  return res.status(404).json({ message: "Database is empty" });
+  const page = Number(req.query.page) || 1;
+  const limit = Number(req.query.limit) || 50;
+  const skip = (page - 1) * limit;
+
+  const documentCount = await Device.countDocuments();
+  const devices = await Device.find().skip(skip).limit(limit);
+
+  return res.status(200).json({ amount: documentCount, message: devices });
 }
 
 const addDevice = async (req, res) => {
