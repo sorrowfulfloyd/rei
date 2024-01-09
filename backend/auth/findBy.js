@@ -1,9 +1,9 @@
-const { Users } = require('../db/models')
+const User = require('../models/users')
 
 const findBy = {
 
   /**
- * Checks if the given email exists in the Users collection.
+ * Checks if the given email exists in the User collection.
  *
  * @param {string} mail - The email to check.
  * @return {boolean} Returns true if the email exists, false otherwise.
@@ -11,7 +11,7 @@ const findBy = {
 
   Email: async (mail) => {
     try {
-      const data = (await Users.find({ email: mail })).length > 0 ? true : false;
+      const data = (await User.find({ email: mail })).length > 0 ? true : false;
       return data;
     } catch (error) {
       console.log(`ERROR in findBy() namespace, couldn't run the Email function\n${error.message}`)
@@ -29,7 +29,7 @@ const findBy = {
 
   Username: async (user, ...forLogin) => {
     try {
-      let userInDB = await Users.findOne({ username: user }) || '';
+      const userInDB = await User.findOne({ username: user }) || '';
 
       let data = (userInDB.username) ? true : false;
 

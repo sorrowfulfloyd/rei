@@ -15,10 +15,10 @@ export default function Customers() {
       },
     })
       .then((response) => {
-        if(response.ok) {
-         setError(null)
-         console.log(response)
-         return response.json();
+        if (response.ok) {
+          setError(null)
+          console.log(response)
+          return response.json();
         }
         throw response;
       })
@@ -42,7 +42,7 @@ export default function Customers() {
         <td>{device.acceptDate}</td>
         <td>{}</td>
       </tr>
-      ))
+    ))
   };
 
   return (
@@ -62,7 +62,7 @@ export default function Customers() {
             {renderData()}
           </tbody>}
         </table>
-      )}
+        )}
     </div>
   );
 }

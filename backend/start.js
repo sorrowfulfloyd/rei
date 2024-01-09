@@ -1,8 +1,10 @@
-const { PORT, connectToDB, app } = require('./app/app')
+const app = require('./app/app')
+const connectToDB = require('./db_connection/connectToDb')
+const PORT = process.env.PORT || 3000;
 
 const start = async () => {
   try {
-    let mongo = await connectToDB(); // this is here to check the connection to db
+    const mongo = await connectToDB(); // this is here to check the connection to db
 
     console.log(`---------------\n[DATABASE] Status: ${mongo.STATES[mongo.connection.readyState]}`);
 

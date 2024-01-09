@@ -2,7 +2,7 @@ require('dotenv').config({ path: './.env' });
 const mongoose = require('mongoose');
 const { Schema } = mongoose;
 
-let date = () => new Date().toLocaleString('tr-TR');
+const date = () => new Date().toLocaleString('tr-TR');
 
 // --------------
 
@@ -22,13 +22,6 @@ let date = () => new Date().toLocaleString('tr-TR');
 
 // --------------
 
-const User = new Schema({
-  username: { type: String, required: true, cast: false },
-  email: { type: String, required: true, cast: false },
-  password: { type: String, required: true, cast: false },
-  // signedIn: { type: Boolean },
-  creationDate: { type: String, default: date() }
-});
 
 const DeviceSchema = new Schema({
   device_type: { type: String, required: true, cast: false },
@@ -40,15 +33,11 @@ const DeviceSchema = new Schema({
   note: { type: String, required: false, default: "", cast: false },
   isWorking: { type: Boolean, required: true, cast: false },
   hasWarranty: { type: Boolean, required: true, cast: false },
-  customerName: { type: String, required: true, cast: false },
-  customerPhone: { type: String, required: true, cast: false },
-  notif: { type: Boolean, required: true, default: false, cast: false },
-  ads: { type: Boolean, required: true, default: false, cast: false },
+  owner: { type: mongoose.Types.ObjectId, ref: "Customer", required: true },
   technicianName: { type: String, default: 'Admin', cast: false },
   acceptDate: { type: String, required: true, default: date(), }
 });
 
 const Device = mongoose.model('Device', DeviceSchema);
-const Users = mongoose.model('Users', User);
 
-module.exports = { Device, Users };
+module.exports = Device;

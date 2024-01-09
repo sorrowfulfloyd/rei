@@ -13,7 +13,7 @@ const createToken = (username) => { // RETARDS THAT MADE THE JWT LIB FOR NODE.JS
   try {
     return jwt.sign({ for: username }, KEY);
   } catch (error) {
-    throw error;
+    return error;
   }
 };
 
