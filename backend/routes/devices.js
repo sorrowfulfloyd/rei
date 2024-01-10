@@ -1,9 +1,18 @@
-const express = require('express')
+const express = require("express");
 const router = express.Router();
 
-const { getDevices, addDevice, deleteDevice } = require('../controller/devices')
+const {
+	getDevices,
+	addDevice,
+	updateDevice,
+	deleteDevice,
+} = require("../controller/devices");
 
-router.route('/').get(getDevices).post(addDevice)
-router.route('/:id').delete(deleteDevice)
+router
+	.route("/")
+	.get(getDevices)
+	.post(addDevice)
+	.delete(deleteDevice)
+	.patch(updateDevice);
 
 module.exports = router;
