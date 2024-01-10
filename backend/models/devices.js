@@ -1,8 +1,8 @@
-require('dotenv').config({ path: './.env' });
-const mongoose = require('mongoose');
+require("dotenv").config({ path: "./.env" });
+const mongoose = require("mongoose");
 const { Schema } = mongoose;
 
-const date = () => new Date().toLocaleString('tr-TR');
+const date = () => new Date().toLocaleString("tr-TR");
 
 // --------------
 
@@ -22,22 +22,21 @@ const date = () => new Date().toLocaleString('tr-TR');
 
 // --------------
 
-
 const DeviceSchema = new Schema({
-  device_type: { type: String, required: true, cast: false },
-  status: { type: String, default: "ongoing", cast: false },
-  brand: { type: String, required: true, cast: false },
-  model: { type: String, required: true, cast: false },
-  problem: { type: String, required: true, cast: false },
-  accessories: { type: String, required: false, default: "", cast: false },
-  note: { type: String, required: false, default: "", cast: false },
-  isWorking: { type: Boolean, required: true, cast: false },
-  hasWarranty: { type: Boolean, required: true, cast: false },
-  owner: { type: mongoose.Types.ObjectId, ref: "Customer", required: true },
-  technicianName: { type: String, default: 'Admin', cast: false },
-  acceptDate: { type: String, required: true, default: date(), }
+	device_type: { type: String, required: true, cast: false },
+	status: { type: String, default: "Ongoing", cast: false },
+	brand: { type: String, required: true, cast: false },
+	model: { type: String, required: true, cast: false },
+	problem: { type: String, required: true, cast: false },
+	accessories: { type: String, required: false, default: "", cast: false },
+	note: { type: String, required: false, default: "", cast: false },
+	isWorking: { type: Boolean, required: true, cast: false },
+	hasWarranty: { type: Boolean, required: true, cast: false },
+	owner: { type: mongoose.Types.ObjectId, ref: "Customer", required: true },
+	technicianName: { type: String, default: "Admin", cast: false },
+	acceptDate: { type: String, required: true, default: date() },
 });
 
-const Device = mongoose.model('Device', DeviceSchema);
+const Device = mongoose.model("Device", DeviceSchema);
 
 module.exports = Device;

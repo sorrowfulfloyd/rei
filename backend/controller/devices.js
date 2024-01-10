@@ -57,9 +57,9 @@ const updateDevice = async (req, res) => {
 
 	console.log("[debug] - req body for updating a device ", payload, id);
 	// stupid hack to keep it going, CHANGE THIS LATER
-	if (Object.keys(req.body).length !== 8) {
-		return res.status(400).json({ message: "Request body is not right" });
-	}
+	// if (Object.keys(req.body).length !== 8) {
+	// 	return res.status(400).json({ message: "Request body is not right" });
+	// }
 
 	const deviceToBeUpdated = await Device.findByIdAndUpdate(id, payload, {
 		new: true,
