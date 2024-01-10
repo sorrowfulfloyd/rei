@@ -9,9 +9,45 @@ export default function Customers() {
 	const [documentCount, setDocumentCount] = useState();
 	const [currentPage, setCurrentPage] = useState(1);
 	const [totalPages, setTotalPages] = useState();
+	const [fetchAgain, setFetch] = useState(true);
+
+	let documentAmount;
+
+	const deleteCustomer = (id) => {
+		fetch(
+			"http://localhost:3000/customers?" +
+				new URLSearchParams({
+					id: id,
+				}),
+			{
+				method: "DELETE",
+				headers: {
+					"Content-Type": "application/json",
+					token: document.cookie.slice(6),
+				},
+			},
+		)
+			.then((response) => {
+				if (response.ok) {
+					console.log(
+						"[debug] - customer document with the id ",
+						id,
+						" has been deleted succesfully",
+					);
+					return alert("Customer has been deleted successfully!");
+				}
+				throw response;
+			})
+			.catch((err) => {
+				alert("Had a problem deleting the customer\n", err);
+			})
+			.finally(() => {
+				setFetch(true);
+			});
+	};
 
 	useEffect(() => {
-		if (limitIndex && currentPage) {
+		if (fetchAgain) {
 			fetch(
 				"http://localhost:3000/customers?" +
 					new URLSearchParams({
@@ -37,7 +73,7 @@ export default function Customers() {
 				})
 				.then((actualData) => {
 					setData(actualData.message);
-					setTotalPages(Math.ceil(documentCount / limitIndex));
+					documentAmount = actualData.amount;
 					setDocumentCount(actualData.amount);
 					console.log("DBG - Response data:", actualData);
 				})
@@ -45,10 +81,12 @@ export default function Customers() {
 					setError(err);
 				})
 				.finally(() => {
+					setTotalPages(Math.ceil(documentAmount / limitIndex));
 					setLoading(false);
+					setFetch(false);
 				});
 		}
-	}, [limitIndex, currentPage, documentCount]);
+	}, [limitIndex, currentPage, fetchAgain, documentAmount]);
 
 	const renderData = () => {
 		return data.map((device) => (
@@ -56,7 +94,34 @@ export default function Customers() {
 				<td>{device.name}</td>
 				<td>{device.phone}</td>
 				<td>{device.devices.length}</td>
-				<td>{}</td>
+				<td>
+					<button
+						type="button"
+						value={device._id}
+						onClick={(e) => {
+							e.preventDefault();
+							setModal(true);
+							setActiveDeviceId(e.target.value);
+						}}
+					>
+						Edit
+					</button>
+				</td>
+				<td>
+					<button
+						type="button"
+						value={device._id}
+						onClick={(e) => {
+							e.preventDefault();
+							let confirmation = confirm("Are you sure?", false);
+							if (confirmation) {
+								deleteCustomer(e.target.value);
+							}
+						}}
+					>
+						Delete
+					</button>
+				</td>
 			</tr>
 		));
 	};
@@ -66,7 +131,13 @@ export default function Customers() {
 
 		for (let i = 1; i <= totalPages; i++) {
 			pageSelectors.push(
-				<a key={i} onClick={() => setCurrentPage(i)}>
+				<a
+					key={i}
+					onClick={() => {
+						setCurrentPage(i);
+						setFetch(true);
+					}}
+				>
 					{i}
 				</a>,
 			);
@@ -86,6 +157,7 @@ export default function Customers() {
 						<select
 							id="showPerPage"
 							onChange={(e) => {
+								setFetch(true);
 								if (e.target.value > documentCount) {
 									setCurrentPage(1);
 								}

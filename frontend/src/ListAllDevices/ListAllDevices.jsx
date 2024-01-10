@@ -13,6 +13,7 @@ export default function ListAllDevices() {
 	const [totalPages, setTotalPages] = useState();
 	const [modal, setModal] = useState(false);
 	const [activeDeviceId, setActiveDeviceId] = useState();
+	const [fetchAgain, setFetch] = useState(true);
 
 	if (modal) {
 		document.body.classList.add("active-modal");
@@ -20,12 +21,46 @@ export default function ListAllDevices() {
 		document.body.classList.remove("active-modal");
 	}
 
+	const deleteDevice = (id) => {
+		fetch(
+			"http://localhost:3000/devices?" +
+				new URLSearchParams({
+					id: id,
+				}),
+			{
+				method: "DELETE",
+				headers: {
+					"Content-Type": "application/json",
+					token: document.cookie.slice(6),
+				},
+			},
+		)
+			.then((response) => {
+				if (response.ok) {
+					console.log(
+						"[debug] - device document with the id ",
+						id,
+						" has been deleted succesfully",
+					);
+					return alert("Device has been deleted successfully!");
+				}
+				throw response;
+			})
+			.catch((err) => {
+				alert("Had a problem deleting the device\n", err);
+			})
+			.finally(() => {
+				setFetch(true);
+			});
+	};
+
 	const hideModal = () => {
+		setFetch(true);
 		setModal(!modal);
 	};
 
 	useEffect(() => {
-		if (limitIndex && currentPage) {
+		if (fetchAgain) {
 			fetch(
 				"http://localhost:3000/devices?" +
 					new URLSearchParams({
@@ -50,8 +85,8 @@ export default function ListAllDevices() {
 				})
 				.then((actualData) => {
 					setData(actualData.message);
-					setTotalPages(Math.ceil(documentCount / limitIndex));
 					setDocumentCount(actualData.amount);
+					setTotalPages(Math.ceil(actualData.amount / limitIndex));
 					console.log("DBG - Response data:", actualData);
 				})
 				.catch((err) => {
@@ -59,9 +94,10 @@ export default function ListAllDevices() {
 				})
 				.finally(() => {
 					setLoading(false);
+					setFetch(false);
 				});
 		}
-	}, [limitIndex, currentPage, documentCount]);
+	}, [fetchAgain, limitIndex, currentPage]);
 
 	const renderData = () => {
 		return data.map((device) => (
@@ -76,14 +112,34 @@ export default function ListAllDevices() {
 				<td>{device.isWorking ? "Yes" : "No"}</td>
 				<td>{device.hasWarranty ? "Yes" : "No"}</td>
 				<td>{device.acceptDate}</td>
-				<button
-					onClick={() => {
-						setModal(!modal);
-						setActiveDeviceId(device._id);
-					}}
-				>
-					Edit
-				</button>
+				<td>
+					<button
+						type="button"
+						value={device._id}
+						onClick={(e) => {
+							e.preventDefault();
+							setModal(true);
+							setActiveDeviceId(e.target.value);
+						}}
+					>
+						Edit
+					</button>
+				</td>
+				<td>
+					<button
+						type="button"
+						value={device._id}
+						onClick={(e) => {
+							e.preventDefault();
+							let confirmation = confirm("Are you sure?", false);
+							if (confirmation) {
+								deleteDevice(e.target.value);
+							}
+						}}
+					>
+						Delete
+					</button>
+				</td>
 			</tr>
 		));
 	};
@@ -93,7 +149,13 @@ export default function ListAllDevices() {
 
 		for (let i = 1; i <= totalPages; i++) {
 			pageSelectors.push(
-				<a key={i} onClick={() => setCurrentPage(i)}>
+				<a
+					key={i}
+					onClick={() => {
+						setCurrentPage(i);
+						setFetch(true);
+					}}
+				>
 					{i}
 				</a>,
 			);
@@ -113,6 +175,7 @@ export default function ListAllDevices() {
 						<select
 							id="showPerPage"
 							onChange={(e) => {
+								setFetch(true);
 								if (e.target.value > documentCount) {
 									setCurrentPage(1);
 								}

@@ -3,12 +3,10 @@
 - [x] WE REALLY HAVE TO CHECK IF THOSE PARAMS ARE GOOD ASAP, STANDRALIZE IT WITH IF ELSE.
 - [x] Combine all the schemas into single one.
 - [x] Group the get all devices and get-a device-by-id into single get function.
-- [ ] Expand the schema for more device types. (TVs, mobile phones, game consoles, etc.)
+- [x] Expand the schema for more device types. (TVs, mobile phones, game consoles, etc.)
 - [x] Implement JWT
-- [ ] Research more on Schema.Add() for more fields to be filled by the users based on their needs, thus making the database modular.
-      (I.e. User is a TV repair shop that also accepts satellite boxes with the TV's for repair, but we don't have that in the base Schema() so the user can expand it.)
-
 - [x] Check out CORS in order to only allow our website(admin panel/costumer UI) to fetch data.
+- [ ] Parse the req.body for update requests accordingly.
 
 ### Security Goals
 

@@ -4,6 +4,7 @@ export default function AddDevice({ hideAddDevice }) {
 	return (
 		<form action="POST" id="addDeviceForm" onSubmit={POSTdevice}>
 			<button
+				type="button"
 				id="close"
 				onClick={(e) => {
 					hideAddDevice();
@@ -36,7 +37,7 @@ export default function AddDevice({ hideAddDevice }) {
 						rows="2"
 						placeholder="Describe the problem.."
 						required
-					></textarea>
+					/>
 					<label htmlFor="note">Additional Notes: </label>
 					<textarea
 						name="note"
@@ -44,7 +45,7 @@ export default function AddDevice({ hideAddDevice }) {
 						cols="18"
 						rows="2"
 						placeholder="Additional notes.."
-					></textarea>
+					/>
 					<label htmlFor="accessories">Accessories: </label>
 					<input
 						type="text"
@@ -105,33 +106,32 @@ function POSTdevice(e) {
 		},
 		body: JSON.stringify({
 			deviceInfo: {
-				device_type: document.forms["addDeviceForm"]["deviceType"].value,
-				brand: document.forms["addDeviceForm"]["make"].value,
-				model: document.forms["addDeviceForm"]["model"].value,
-				problem: document.forms["addDeviceForm"]["problem"].value,
-				accessories: document.forms["addDeviceForm"]["accessories"].value,
-				note: document.forms["addDeviceForm"]["note"].value,
-				isWorking: document.forms["addDeviceForm"]["workingRadio"].checked,
-				hasWarranty: document.forms["addDeviceForm"]["warrantyRadio"].checked,
+				device_type: document.forms[0][1].value,
+				brand: document.forms[0][2].value,
+				model: document.forms[0][3].value,
+				problem: document.forms[0][4].value,
+				note: document.forms[0][5].value,
+				accessories: document.forms[0][6].value,
+				isWorking: document.forms[0][7].checked,
+				hasWarranty: document.forms[0][8].checked,
 			},
 			customerInfo: {
-				name: document.forms["addDeviceForm"]["customerName"].value,
-				phone: document.forms["addDeviceForm"]["customerPhone"].value,
-				notif: document.forms["addDeviceForm"]["wantNotif"].checked,
-				ads: document.forms["addDeviceForm"]["wantAds"].checked,
+				name: document.forms[0][9].value,
+				phone: document.forms[0][10].value,
+				notif: document.forms[0][11].checked,
+				ads: document.forms[0][12].checked,
 			},
 		}),
 	})
 		.then((response) => {
 			if (response.status === 200) {
 				alert("Device added");
-				document.forms["addDeviceForm"].reset();
+				document.forms[0].reset();
 				return response.json();
-			} else {
-				alert(
-					`Something went wrong\n${response.status} - ${response.statusText}`,
-				);
 			}
+			alert(
+				`Something went wrong\n${response.status} - ${response.statusText}`,
+			);
 		})
 		.then((data) => {
 			console.log(data); // for debug - delete this later

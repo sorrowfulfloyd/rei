@@ -130,3 +130,5 @@ dist
 .pnp.*
 
 archive/
+nvim-treesitter/
+nvim-ts-autotag/

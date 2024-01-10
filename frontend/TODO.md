@@ -8,3 +8,7 @@
 - Cleaned up and fixed bugs in the parser
 - Bind amount of devices to their owners then display 
 - Pull n amount per request and page it 
+
+#### Explore
+
+- Form validation for adding and updating docs
