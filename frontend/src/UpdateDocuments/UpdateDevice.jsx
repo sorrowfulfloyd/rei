@@ -6,6 +6,7 @@ function UpdateDevice({ toggleModal, device }) {
 	const [loading, setLoading] = useState(true);
 	const [error, setError] = useState(null);
 	const [fetchStatus, setFetchStatus] = useState(true);
+	const [displayTextbox, setDisplay] = useState();
 
 	function POSTdevice(e) {
 		e.preventDefault();
@@ -21,22 +22,17 @@ function UpdateDevice({ toggleModal, device }) {
 					token: document.cookie.slice(6),
 				},
 				body: JSON.stringify({
-					deviceInfo: {
-						device_type: document.forms[0][1].value,
-						brand: document.forms[0][2].value,
-						model: document.forms[0][3].value,
-						problem: document.forms[0][4].value,
-						note: document.forms[0][5].value,
-						accessories: document.forms[0][6].value,
-						isWorking: document.forms[0][7].checked,
-						hasWarranty: document.forms[0][8].checked,
-					},
-					customerInfo: {
-						name: document.forms[0][9].value,
-						phone: document.forms[0][10].value,
-						notif: document.forms[0][11].checked,
-						ads: document.forms[0][12].checked,
-					},
+					device_type:
+						document.forms[0]["deviceType"].value === "Other"
+							? document.forms[0][2].value
+							: document.forms[0]["deviceType"].value,
+					brand: document.forms[0]["make"].value,
+					model: document.forms[0]["model"].value,
+					problem: document.forms[0]["problem"].value,
+					note: document.forms[0]["note"].value,
+					accessories: document.forms[0]["accessories"].value,
+					isWorking: document.forms[0]["workingRadio"].checked,
+					hasWarranty: document.forms[0]["warrantyRadio"].checked,
 				}),
 			},
 		)
@@ -121,16 +117,31 @@ function UpdateDevice({ toggleModal, device }) {
 										X
 									</button>
 									<h1>Update device info</h1>
-									<div id="conta">
+									<div id="updateDeviceContainer">
 										<span id="de">
 											<label htmlFor="deviceType">Device type: </label>
-											<input
-												type="text"
+											<select
 												name="deviceType"
-												id=""
-												defaultValue={data.device_type}
-												required
-											/>
+												onClick={(e) => {
+													e.target.value === "Other"
+														? setDisplay(true)
+														: setDisplay(false);
+												}}
+											>
+												<option value="Laptop">Laptop</option>
+												<option value="TV">TV</option>
+												<option value="Phone">Phone</option>
+												<option value="Other">Other</option>
+											</select>
+											{displayTextbox && (
+												<input
+													type="text"
+													name="deviceTypeField"
+													id=""
+													placeholder="Device Type"
+													required
+												/>
+											)}{" "}
 											<label htmlFor="make">Brand: </label>
 											<input
 												type="text"

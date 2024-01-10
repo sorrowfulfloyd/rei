@@ -1,6 +1,61 @@
+import { useState } from "react";
 import "./AddDevice.css";
 
 export default function AddDevice({ hideAddDevice }) {
+	const [displayTextbox, setDisplay] = useState();
+
+	function POSTdevice(e) {
+		e.preventDefault();
+		fetch("http://localhost:3000/devices", {
+			method: "POST",
+			headers: {
+				"Content-Type": "application/json",
+				token: document.cookie.slice(6),
+			},
+			body: JSON.stringify({
+				deviceInfo: {
+					device_type:
+						document.forms[0]["deviceType"].value === "Other"
+							? document.forms[0][2].value
+							: document.forms[0]["deviceType"].value,
+					brand: document.forms[0]["make"].value,
+					model: document.forms[0]["model"].value,
+					problem: document.forms[0]["problem"].value,
+					note: document.forms[0]["note"].value,
+					accessories: document.forms[0]["accessories"].value,
+					isWorking: document.forms[0]["workingRadio"].checked,
+					hasWarranty: document.forms[0]["warrantyRadio"].checked,
+				},
+				customerInfo: {
+					name: document.forms[0]["customerName"].value,
+					phone: document.forms[0]["customerPhone"].value,
+					notif: document.forms[0]["wantNotif"].checked,
+					ads: document.forms[0]["wantAds"].checked,
+				},
+			}),
+		})
+			.then((response) => {
+				if (response.ok) {
+					alert("Device added");
+					return response.json();
+				}
+				alert(
+					`Something went wrong\n${response.status} - ${response.statusText}`,
+				);
+			})
+			.then((data) => {
+				console.log(data); // for debug - delete this later
+			})
+			.catch((error) => {
+				console.log(error);
+				alert(`Something went wrong. Check the console.\n${error}`);
+			})
+			.finally(() => {
+				document.forms["addDeviceForm"].reset();
+				setDisplay(false);
+			});
+	}
+
 	return (
 		<form action="POST" id="addDeviceForm" onSubmit={POSTdevice}>
 			<button
@@ -18,13 +73,26 @@ export default function AddDevice({ hideAddDevice }) {
 				<span id="deviceInfo">
 					<h2>Device info</h2>
 					<label htmlFor="deviceType">Device type: </label>
-					<input
-						type="text"
+					<select
 						name="deviceType"
-						id=""
-						placeholder="Device type"
-						required
-					/>
+						onClick={(e) => {
+							e.target.value === "Other" ? setDisplay(true) : setDisplay(false);
+						}}
+					>
+						<option value="Laptop">Laptop</option>
+						<option value="TV">TV</option>
+						<option value="Phone">Phone</option>
+						<option value="Other">Other</option>
+					</select>
+					{displayTextbox && (
+						<input
+							type="text"
+							name="deviceTypeField"
+							id=""
+							placeholder="Device Type"
+							required
+						/>
+					)}
 					<label htmlFor="make">Brand: </label>
 					<input type="text" name="make" id="" placeholder="Brand" required />
 					<label htmlFor="model">Model: </label>
@@ -94,50 +162,4 @@ export default function AddDevice({ hideAddDevice }) {
 			</button>
 		</form>
 	);
-}
-
-function POSTdevice(e) {
-	e.preventDefault();
-	fetch("http://localhost:3000/devices", {
-		method: "POST",
-		headers: {
-			"Content-Type": "application/json",
-			token: document.cookie.slice(6),
-		},
-		body: JSON.stringify({
-			deviceInfo: {
-				device_type: document.forms[0][1].value,
-				brand: document.forms[0][2].value,
-				model: document.forms[0][3].value,
-				problem: document.forms[0][4].value,
-				note: document.forms[0][5].value,
-				accessories: document.forms[0][6].value,
-				isWorking: document.forms[0][7].checked,
-				hasWarranty: document.forms[0][8].checked,
-			},
-			customerInfo: {
-				name: document.forms[0][9].value,
-				phone: document.forms[0][10].value,
-				notif: document.forms[0][11].checked,
-				ads: document.forms[0][12].checked,
-			},
-		}),
-	})
-		.then((response) => {
-			if (response.status === 200) {
-				alert("Device added");
-				document.forms[0].reset();
-				return response.json();
-			}
-			alert(
-				`Something went wrong\n${response.status} - ${response.statusText}`,
-			);
-		})
-		.then((data) => {
-			console.log(data); // for debug - delete this later
-		})
-		.catch((error) => {
-			console.log(error);
-			alert(`Something went wrong. Check the console.\n${error}`);
-		});
 }
