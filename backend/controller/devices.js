@@ -1,6 +1,7 @@
 const mongoose = require("mongoose");
 const Device = require("../models/devices");
 const Customer = require("../models/customers");
+const ObjectId = mongoose.Types.ObjectId;
 
 const getDevices = async (req, res) => {
 	const { id, owner, fields } = req.query;
@@ -91,6 +92,32 @@ const deleteDevice = async (req, res) => {
 	if (!mongoose.Types.ObjectId.isValid(id) || !id) {
 		return res.status(400).json({ message: `ID you've given is not valid!` });
 	}
+
+	// TODO: fix the retardation below, or is it a retardation?
+	const deviceId = await Device.findById(id).lean();
+
+	// console.log("device", deviceId);
+
+	const ownerId = await Customer.findById(deviceId.owner).lean();
+
+	// console.log("owner", ownerId);
+
+	// console.log("before the loop", ownerId.devices);
+
+	for (const device_id of ownerId.devices) {
+		if (device_id === id) {
+			const index = ownerId.devices.indexOf(device_id);
+			ownerId.devices.splice(index, 1);
+		}
+	}
+
+	// console.log("after the loop ", ownerId.devices);
+
+	await Customer.findByIdAndUpdate(
+		ownerId._id,
+		{ devices: ownerId.devices },
+		{ new: true },
+	);
 
 	const deviceToBeDeleted = await Device.findByIdAndDelete(id);
 
