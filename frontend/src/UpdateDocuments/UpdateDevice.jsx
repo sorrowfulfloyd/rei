@@ -12,9 +12,9 @@ function UpdateDevice({ toggleModal, device }) {
 		e.preventDefault();
 		fetch(
 			"http://localhost:3000/devices?" +
-				new URLSearchParams({
-					id: device,
-				}),
+			new URLSearchParams({
+				id: device,
+			}),
 			{
 				method: "PATCH",
 				headers: {
@@ -60,9 +60,9 @@ function UpdateDevice({ toggleModal, device }) {
 		if (fetchStatus) {
 			fetch(
 				"http://localhost:3000/devices?" +
-					new URLSearchParams({
-						id: device,
-					}),
+				new URLSearchParams({
+					id: device,
+				}),
 				{
 					method: "GET",
 					headers: {
@@ -84,7 +84,7 @@ function UpdateDevice({ toggleModal, device }) {
 					console.log("DBG - Response data:", actualData.message);
 				})
 				.catch((err) => {
-					setError(err);
+					setError(err.status + " " + err.statusText);
 				})
 				.finally(() => {
 					setLoading(false);
@@ -142,6 +142,7 @@ function UpdateDevice({ toggleModal, device }) {
 													required
 												/>
 											)}{" "}
+											<br />
 											<label htmlFor="make">Brand: </label>
 											<input
 												type="text"
@@ -150,6 +151,7 @@ function UpdateDevice({ toggleModal, device }) {
 												defaultValue={data.brand}
 												required
 											/>
+											<br />
 											<label htmlFor="model">Model: </label>
 											<input
 												type="text"
@@ -158,6 +160,7 @@ function UpdateDevice({ toggleModal, device }) {
 												defaultValue={data.model}
 												required
 											/>
+											<br />
 											<label htmlFor="problem">Problem: </label>
 											<textarea
 												name="problem"
@@ -167,6 +170,7 @@ function UpdateDevice({ toggleModal, device }) {
 												defaultValue={data.problem}
 												required
 											/>
+											<br />
 											<label htmlFor="note">Additional Notes: </label>
 											<textarea
 												name="note"
@@ -175,6 +179,7 @@ function UpdateDevice({ toggleModal, device }) {
 												rows="2"
 												defaultValue={data.note}
 											/>
+											<br />
 											<label htmlFor="accessories">Accessories: </label>
 											<input
 												type="text"
@@ -182,6 +187,8 @@ function UpdateDevice({ toggleModal, device }) {
 												id=""
 												defaultValue={data.accessories}
 											/>
+											<br />
+											<br />
 											<span>
 												<input
 													type="checkbox"
@@ -191,6 +198,7 @@ function UpdateDevice({ toggleModal, device }) {
 												/>{" "}
 												Is it working?
 											</span>
+											<br />
 											<span>
 												<input
 													type="checkbox"
@@ -200,6 +208,8 @@ function UpdateDevice({ toggleModal, device }) {
 												/>
 												Does it have warranty?
 											</span>
+											<br />
+											<br />
 										</span>
 									</div>
 									<button type="submit" form="updateDeviceForm">

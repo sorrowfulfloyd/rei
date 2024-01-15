@@ -1,6 +1,8 @@
 import { useEffect, useRef, useState } from "react";
 import "./ListCustomers.css";
 
+import UpdateCustomer from "../UpdateDocuments/UpdateCustomer";
+
 export default function Customers() {
 	const [data, setData] = useState(null);
 	const [loading, setLoading] = useState(true);
@@ -8,10 +10,25 @@ export default function Customers() {
 
 	const [fetchAgain, setFetch] = useState(true);
 
+	const [modal, setModal] = useState(false);
+
+	const [activeCustomerId, setActiveCustomerId] = useState(null);
+
 	const limitIndex = useRef(10);
 	const documentCount = useRef(1);
 	const currentPage = useRef(1);
 	const totalPages = useRef(1);
+
+	if (modal) {
+		document.body.classList.add("active-modal");
+	} else {
+		document.body.classList.remove("active-modal");
+	}
+
+	const hideModal = () => {
+		setFetch(true);
+		setModal(!modal);
+	};
 
 	useEffect(() => {
 		if (fetchAgain) {
@@ -90,19 +107,19 @@ export default function Customers() {
 	};
 
 	const renderData = () => {
-		return data.map((device) => (
-			<tr key={device._id} id={device._id}>
-				<td>{device.name}</td>
-				<td>{device.phone}</td>
-				<td>{device.devices.length}</td>
+		return data.map((customer) => (
+			<tr key={customer._id} id={customer._id}>
+				<td>{customer.name}</td>
+				<td>{customer.phone}</td>
+				<td>{customer.devices.length}</td>
 				<td>
 					<button
 						type="button"
-						value={device._id}
+						value={customer._id}
 						onClick={(e) => {
 							e.preventDefault();
 							setModal(true);
-							setActiveDeviceId(e.target.value);
+							setActiveCustomerId(e.target.value);
 						}}
 					>
 						Edit
@@ -111,7 +128,7 @@ export default function Customers() {
 				<td>
 					<button
 						type="button"
-						value={device._id}
+						value={customer._id}
 						onClick={(e) => {
 							e.preventDefault();
 							const confirmation = confirm("Are you sure?", false);
@@ -159,7 +176,7 @@ export default function Customers() {
 							id="showPerPage"
 							onChange={(e) => {
 								if (e.target.value > documentCount.current) {
-									setCurrentPage(1);
+									currentPage.current = 1;
 								}
 								setFetch(true);
 								limitIndex.current = e.target.value;
@@ -189,6 +206,12 @@ export default function Customers() {
 						)}
 						{data && <tbody id="deviceList">{renderData()}</tbody>}
 					</table>
+					{modal && (
+						<UpdateCustomer
+							toggleModal={hideModal}
+							customer={activeCustomerId}
+						/>
+					)}
 				</>
 			)}
 		</div>
