@@ -1,24 +1,67 @@
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import "./ListCustomers.css";
 
 export default function Customers() {
 	const [data, setData] = useState(null);
 	const [loading, setLoading] = useState(true);
 	const [error, setError] = useState(null);
-	const [limitIndex, setLimitIndex] = useState(10);
-	const [documentCount, setDocumentCount] = useState();
-	const [currentPage, setCurrentPage] = useState(1);
-	const [totalPages, setTotalPages] = useState();
+
 	const [fetchAgain, setFetch] = useState(true);
 
-	let documentAmount;
+	const limitIndex = useRef(10);
+	const documentCount = useRef(1);
+	const currentPage = useRef(1);
+	const totalPages = useRef(1);
+
+	useEffect(() => {
+		if (fetchAgain) {
+			fetch(
+				"http://localhost:3000/customers?" +
+				new URLSearchParams({
+					page: currentPage.current,
+					limit: limitIndex.current,
+				}),
+				{
+					method: "GET",
+					headers: {
+						"Content-Type": "application/json",
+						token: document.cookie.slice(6),
+					},
+				},
+			)
+				.then((response) => {
+					if (response.ok) {
+						setError(null);
+						console.log("DBG - Response payload:", response);
+						console.log(response);
+						return response.json();
+					}
+					throw response;
+				})
+				.then((actualData) => {
+					setData(actualData.message);
+					documentCount.current = actualData.amount;
+					console.log("DBG - Response data:", actualData);
+				})
+				.catch((err) => {
+					setError(err);
+				})
+				.finally(() => {
+					totalPages.current = Math.ceil(
+						documentCount.current / limitIndex.current,
+					);
+					setLoading(false);
+					setFetch(false);
+				});
+		}
+	}, [fetchAgain]);
 
 	const deleteCustomer = (id) => {
 		fetch(
 			"http://localhost:3000/customers?" +
-				new URLSearchParams({
-					id: id,
-				}),
+			new URLSearchParams({
+				id: id,
+			}),
 			{
 				method: "DELETE",
 				headers: {
@@ -46,48 +89,6 @@ export default function Customers() {
 			});
 	};
 
-	useEffect(() => {
-		if (fetchAgain) {
-			fetch(
-				"http://localhost:3000/customers?" +
-					new URLSearchParams({
-						page: currentPage,
-						limit: limitIndex,
-					}),
-				{
-					method: "GET",
-					headers: {
-						"Content-Type": "application/json",
-						token: document.cookie.slice(6),
-					},
-				},
-			)
-				.then((response) => {
-					if (response.ok) {
-						setError(null);
-						console.log("DBG - Response payload:", response);
-						console.log(response);
-						return response.json();
-					}
-					throw response;
-				})
-				.then((actualData) => {
-					setData(actualData.message);
-					documentAmount = actualData.amount;
-					setDocumentCount(actualData.amount);
-					console.log("DBG - Response data:", actualData);
-				})
-				.catch((err) => {
-					setError(err);
-				})
-				.finally(() => {
-					setTotalPages(Math.ceil(documentAmount / limitIndex));
-					setLoading(false);
-					setFetch(false);
-				});
-		}
-	}, [limitIndex, currentPage, fetchAgain, documentAmount]);
-
 	const renderData = () => {
 		return data.map((device) => (
 			<tr key={device._id} id={device._id}>
@@ -113,7 +114,7 @@ export default function Customers() {
 						value={device._id}
 						onClick={(e) => {
 							e.preventDefault();
-							let confirmation = confirm("Are you sure?", false);
+							const confirmation = confirm("Are you sure?", false);
 							if (confirmation) {
 								deleteCustomer(e.target.value);
 							}
@@ -129,12 +130,12 @@ export default function Customers() {
 	const renderPageSelectors = () => {
 		const pageSelectors = [];
 
-		for (let i = 1; i <= totalPages; i++) {
+		for (let i = 1; i <= totalPages.current; i++) {
 			pageSelectors.push(
 				<a
 					key={i}
 					onClick={() => {
-						setCurrentPage(i);
+						currentPage.current = i;
 						setFetch(true);
 					}}
 				>
@@ -153,15 +154,15 @@ export default function Customers() {
 			) : (
 				<>
 					<div id="topPanel">
-						<p>{documentCount} record(s)</p>
+						<p>{documentCount.current} record(s)</p>
 						<select
 							id="showPerPage"
 							onChange={(e) => {
-								setFetch(true);
-								if (e.target.value > documentCount) {
+								if (e.target.value > documentCount.current) {
 									setCurrentPage(1);
 								}
-								setLimitIndex(e.target.value);
+								setFetch(true);
+								limitIndex.current = e.target.value;
 							}}
 						>
 							<option value="10">10</option>
@@ -170,7 +171,7 @@ export default function Customers() {
 							<option value="100">100</option>
 							<option value="250">250</option>
 						</select>
-						{totalPages > 1 && (
+						{totalPages.current > 1 && (
 							<div id="pageSelector">{renderPageSelectors()}</div>
 						)}
 					</div>
