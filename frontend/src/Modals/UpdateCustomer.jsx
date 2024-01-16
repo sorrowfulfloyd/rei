@@ -103,14 +103,13 @@ function UpdateCustomer({ toggleModal, customer }) {
 				.then((response) => {
 					if (response.ok) {
 						setError(null);
-						console.log("DBG - Response payload:", response);
 						return response.json();
 					}
 					throw response;
 				})
 				.then((actualData) => {
 					setData(actualData.message);
-					console.log("DBG - Response data:", actualData.message);
+					console.log("EditCustomer - Response data:", actualData.message);
 				})
 				.catch((err) => {
 					console.log(err);

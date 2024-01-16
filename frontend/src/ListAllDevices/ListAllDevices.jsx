@@ -38,6 +38,7 @@ export default function ListAllDevices() {
 				new URLSearchParams({
 					page: currentPage.current,
 					limit: limitIndex.current,
+					fields: "-__v,-owner",
 				}),
 				{
 					method: "GET",
@@ -50,7 +51,6 @@ export default function ListAllDevices() {
 				.then((response) => {
 					if (response.ok) {
 						setError(null);
-						console.log("DBG - Response payload:", response);
 						return response.json();
 					}
 					throw response;
@@ -61,7 +61,7 @@ export default function ListAllDevices() {
 					totalPages.current = Math.ceil(
 						documentCount.current / limitIndex.current,
 					);
-					console.log("DBG - Response data:", actualData);
+					console.log("ListAllDevices - Response data:", actualData);
 				})
 				.catch((err) => {
 					setError(err);

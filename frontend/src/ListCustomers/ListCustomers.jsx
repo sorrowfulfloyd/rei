@@ -37,6 +37,7 @@ export default function Customers() {
 				new URLSearchParams({
 					page: currentPage.current,
 					limit: limitIndex.current,
+					fields: "-__v",
 				}),
 				{
 					method: "GET",
@@ -49,8 +50,6 @@ export default function Customers() {
 				.then((response) => {
 					if (response.ok) {
 						setError(null);
-						console.log("DBG - Response payload:", response);
-						console.log(response);
 						return response.json();
 					}
 					throw response;
@@ -58,7 +57,7 @@ export default function Customers() {
 				.then((actualData) => {
 					setData(actualData.message);
 					documentCount.current = actualData.amount;
-					console.log("DBG - Response data:", actualData);
+					console.log("ListCustomers - Response data:", actualData);
 				})
 				.catch((err) => {
 					setError(err);

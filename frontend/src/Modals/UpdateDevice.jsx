@@ -74,14 +74,13 @@ function UpdateDevice({ toggleModal, device }) {
 				.then((response) => {
 					if (response.ok) {
 						setError(null);
-						console.log("DBG - Response payload:", response);
 						return response.json();
 					}
 					throw response;
 				})
 				.then((actualData) => {
 					setData(actualData.message);
-					console.log("DBG - Response data:", actualData.message);
+					console.log("EditDevice - Response data:", actualData.message);
 				})
 				.catch((err) => {
 					setError(err.status + " " + err.statusText);
