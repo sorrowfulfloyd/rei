@@ -1,7 +1,6 @@
 const mongoose = require("mongoose");
 const Device = require("../models/devices");
 const Customer = require("../models/customers");
-const ObjectId = mongoose.Types.ObjectId;
 
 const getDevices = async (req, res) => {
 	const { id, owner, fields } = req.query;
@@ -17,8 +16,8 @@ const getDevices = async (req, res) => {
 		return device !== null
 			? res.status(200).json({ message: device })
 			: res.status(404).json({
-					message: `Couldn't find any object with given data`,
-			  });
+				message: `Couldn't find any object with given data`,
+			});
 	}
 
 	if (owner) {
@@ -95,40 +94,35 @@ const deleteDevice = async (req, res) => {
 
 	// TODO: fix the retardation below, or is it a retardation?
 	const deviceId = await Device.findById(id).lean();
-
-	// console.log("device", deviceId);
-
 	const ownerId = await Customer.findById(deviceId.owner).lean();
 
-	// console.log("owner", ownerId);
-
-	// console.log("before the loop", ownerId.devices);
-
-	for (const device_id of ownerId.devices) {
-		if (device_id === id) {
-			const index = ownerId.devices.indexOf(device_id);
-			ownerId.devices.splice(index, 1);
+	if (ownerId) {
+		for (const device_id of ownerId.devices) {
+			if (device_id === id) {
+				const index = ownerId.devices.indexOf(device_id);
+				ownerId.devices.splice(index, 1);
+			}
 		}
+
+		// console.log("after the loop ", ownerId.devices);
+
+		await Customer.findByIdAndUpdate(
+			ownerId._id,
+			{ devices: ownerId.devices },
+			{ new: true },
+		);
 	}
-
-	// console.log("after the loop ", ownerId.devices);
-
-	await Customer.findByIdAndUpdate(
-		ownerId._id,
-		{ devices: ownerId.devices },
-		{ new: true },
-	);
 
 	const deviceToBeDeleted = await Device.findByIdAndDelete(id);
 
 	return deviceToBeDeleted !== null
 		? res.status(200).json({
-				message: "Device is successfully deleted",
-				object: { deviceToBeDeleted },
-		  })
+			message: "Device is successfully deleted",
+			object: { deviceToBeDeleted },
+		})
 		: res
-				.status(404)
-				.json({ message: `Couldn't find any object with given data` });
+			.status(404)
+			.json({ message: `Couldn't find any object with given data` });
 };
 
 module.exports = { getDevices, addDevice, updateDevice, deleteDevice };
