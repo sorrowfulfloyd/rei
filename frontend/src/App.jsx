@@ -49,17 +49,6 @@ function App() {
       {isCustomersVisible && (
         <ListCustomers hideCustomers={setCustomersVisibility} />
       )}
-      <div className="card">
-        <h1>We cool?</h1>
-
-        <p>
-          Lorem ipsum dolor sit amet consectetur adipisicing elit. Optio quos
-          inventore laboriosam assumenda ullam rem ut, iusto corrupti obcaecati,
-          cupiditate aperiam sapiente velit exercitationem autem labore officiis
-          similique voluptatem qui?
-        </p>
-        <button>We cool.</button>
-      </div>
       <Footer />
     </>
   );

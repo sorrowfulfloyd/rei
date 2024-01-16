@@ -1,7 +1,7 @@
 import { useEffect, useRef, useState } from "react";
 import "./ListCustomers.css";
 
-import UpdateCustomer from "../UpdateDocuments/UpdateCustomer";
+import UpdateCustomer from "../Modals/UpdateCustomer";
 
 export default function Customers() {
 	const [data, setData] = useState(null);
@@ -99,7 +99,7 @@ export default function Customers() {
 				throw response;
 			})
 			.catch((err) => {
-				alert("Had a problem deleting the customer\n", err);
+				alert("Had a problem deleting the customer\n", err.status);
 			})
 			.finally(() => {
 				setFetch(true);

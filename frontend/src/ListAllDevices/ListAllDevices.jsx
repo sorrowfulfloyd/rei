@@ -1,7 +1,7 @@
 import { useEffect, useRef, useState } from "react";
 import "./ListAllDevices.css";
 
-import UpdateDevice from "../UpdateDocuments/UpdateDevice";
+import UpdateDevice from "../Modals/UpdateDevice";
 
 export default function ListAllDevices() {
 	const [data, setData] = useState(null);
