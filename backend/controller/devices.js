@@ -44,25 +44,42 @@ const getDevices = async (req, res) => {
 };
 
 const addDevice = async (req, res) => {
-	const { deviceInfo, customerInfo } = req.body;
+	const { deviceInfo, customerInfo, id } = req.body;
 
 	if (Object.keys(req.body).length === 0) {
 		return res.status(400).json({ message: "Request body is empty" });
 	}
+	if (customerInfo) {
+		const device = new Device(deviceInfo);
+		const owner = new Customer(customerInfo);
 
-	const owner = new Customer(customerInfo);
-	const device = new Device(deviceInfo);
+		device.owner = owner;
+		owner.devices.push(device.id);
+		const insertDevice = await device.save();
+		const insertedOwner = await owner.save();
 
-	device.owner = owner;
-	owner.devices.push(device.id);
-	const insertDevice = await device.save();
-	const insertedOwner = await owner.save();
+		return res.status(200).json({
+			message: "Successfully inserted the device",
+			object: insertDevice,
+			object2: insertedOwner,
+		});
+	}
+	if (id) {
+		const device = new Device(deviceInfo);
+		const owner = await Customer.findById(id);
+		device.owner = owner;
+		owner.devices.push(device.id);
+		const insertDevice = await device.save();
+		const insertedOwner = await Customer.findByIdAndUpdate(id, {
+			devices: owner.devices,
+		});
 
-	return res.status(200).json({
-		message: "Successfully inserted the device",
-		object: insertDevice,
-		object2: insertedOwner,
-	});
+		return res.status(200).json({
+			message: "Successfully inserted the device",
+			object: insertDevice,
+			object2: insertedOwner,
+		});
+	}
 };
 
 const updateDevice = async (req, res) => {
