@@ -6,9 +6,6 @@ export default function NavBar() {
       <div className="left">
         <img src="" alt="" id="logo" />
       </div>
-      <div className="right">
-        <a>My Account</a>
-      </div>
     </div>
   );
 }

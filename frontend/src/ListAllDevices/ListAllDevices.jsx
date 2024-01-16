@@ -13,6 +13,10 @@ export default function ListAllDevices() {
 	const [status, setStatus] = useState(false);
 	const [activeDeviceId, setActiveDeviceId] = useState(null);
 
+	const [deviceType, setDeviceType] = useState("All");
+	const [repairStatus, setRepairStatus] = useState("All");
+	const [sortBy, setSortBy] = useState("-acceptDate");
+
 	const [fetchAgain, setFetch] = useState(true);
 
 	const limitIndex = useRef(10);
@@ -39,6 +43,9 @@ export default function ListAllDevices() {
 					page: currentPage.current,
 					limit: limitIndex.current,
 					fields: "-__v,-owner",
+					deviceType: deviceType,
+					repairStatus: repairStatus,
+					sort: sortBy,
 				}),
 				{
 					method: "GET",
@@ -71,7 +78,7 @@ export default function ListAllDevices() {
 					setFetch(false);
 				});
 		}
-	}, [fetchAgain]);
+	}, [fetchAgain, deviceType, repairStatus, sortBy]);
 
 	const deleteDevice = (id) => {
 		fetch(
@@ -254,14 +261,88 @@ export default function ListAllDevices() {
 		return pageSelectors;
 	};
 
+	const resetSelectors = () => {
+		setDeviceType("All");
+		setRepairStatus("All");
+		const typeSelect = document.querySelector("#deviceTypeSelector");
+		typeSelect.value = "All";
+		const statusSelect = document.querySelector("#repairStatusSelector");
+		statusSelect.value = "All";
+		setFetch(true);
+	};
+
 	return (
 		<div id="containerx">
 			{loading ? (
 				<p>Loading...</p>
 			) : (
 				<>
+					<div id="query">
+						<label htmlFor="deviceTypeSelector">Device type:</label>
+						<select
+							name="deviceTypeSelector"
+							id="deviceTypeSelector"
+							defaultValue={deviceType}
+							onChange={(e) => {
+								setDeviceType(e.target.value);
+							}}
+						>
+							<option value="All">All</option>
+							<option value="Laptop">Laptop</option>
+							<option value="TV">TV</option>
+							<option value="Phone">Phone</option>
+						</select>
+						<label htmlFor="repairStatusSelector">Status:</label>
+						<select
+							name="repairStatusSelector"
+							id="repairStatusSelector"
+							defaultValue={repairStatus}
+							onChange={(e) => {
+								setRepairStatus(e.target.value);
+							}}
+						>
+							<option>All</option>
+							<option>Ongoing</option>
+							<option>On-hold</option>
+							<option>Done</option>
+							<option>Cancelled</option>
+						</select>
+						<button
+							type="button"
+							onClick={(e) => {
+								e.preventDefault();
+								setFetch(true);
+							}}
+						>
+							Search
+						</button>
+						<button
+							type="button"
+							onClick={(e) => {
+								e.preventDefault();
+								resetSelectors();
+							}}
+						>
+							Reset
+						</button>
+						<br />
+						<label htmlFor="sortList"> Sort by:</label>
+						<select
+							name="sortList"
+							defaultValue={repairStatus}
+							onChange={(e) => {
+								setSortBy(e.target.value);
+								setFetch(true);
+							}}
+						>
+							<option value="-acceptDate">Newest: Accept Date</option>
+							<option value="acceptDate">Oldest: Accept Date</option>
+							<option value="brand">Brand (A-Z)</option>
+							<option value="model">Model (A-Z)</option>
+						</select>
+					</div>
 					<div id="topPanel">
-						<p>{documentCount.current} record(s)</p>
+						<p>{documentCount.current} record(s) in total</p>
 						<select
 							id="showPerPage"
 							onChange={(e) => {
@@ -282,26 +363,27 @@ export default function ListAllDevices() {
 							<div id="pageSelector">{renderPageSelectors()}</div>
 						)}
 					</div>
-					<table>
-						<thead>
-							<tr>
-								<th>Device Type</th>
-								<th>Status</th>
-								<th>Brand</th>
-								<th>Model</th>
-								<th>Accessories</th>
-								<th>Problem</th>
-								<th>Additional Notes</th>
-								<th>Was it working?</th>
-								<th>Has Warranty?</th>
-								<th>Accept Date</th>
-							</tr>
-						</thead>
-						{error && (
-							<p>{`There was a problem with fetching the data - ${error}`}</p>
-						)}
-						{data && <tbody id="deviceList">{renderData()}</tbody>}
-					</table>
+					{error ? (
+						<p>{`There was a problem with fetching the data - ${error}`}</p>
+					) : (
+						<table>
+							<thead>
+								<tr>
+									<th>Device Type</th>
+									<th>Status</th>
+									<th>Brand</th>
+									<th>Model</th>
+									<th>Accessories</th>
+									<th>Problem</th>
+									<th>Additional Notes</th>
+									<th>Was it working?</th>
+									<th>Has Warranty?</th>
+									<th>Accept Date</th>
+								</tr>
+							</thead>
+							{data && <tbody id="deviceList">{renderData()}</tbody>}
+						</table>
+					)}
 					{modal && (
 						<UpdateDevice toggleModal={hideModal} device={activeDeviceId} />
 					)}

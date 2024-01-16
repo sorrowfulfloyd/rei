@@ -1,11 +1,6 @@
 ### Frontend TODO
 
 #### Future
-- On list all devices;
-  - filter the devices by status or device type
-  - sort by accept date (asc,desc)
-- While adding a device, add support for adding to existing owner
-- Hide the sensible parts (Technician name, owner id etc.) from the frontend
 
 #### Maybe
 - Add owner name reference to device document when it's created in the server and show it as read-only in the list maybe?
@@ -20,6 +15,12 @@
 - Modal to edit customers(show owned devices as read-only when there)
 - Unbind the device from customer in server when deleted (owner's id dies with it but still have to delete the device id from customer's array!!!)
 - When deleting a customer also delete all their devices
+- While adding a device, add support for adding to existing owner
+- Hide the sensible parts (Technician name, owner id etc.) from the frontend
+- On list all devices;
+  - filter the devices by status or device type
+  - sort by accept date (asc,desc)
+- Add a reset button or a href for clean search again
 
 #### Explore
 

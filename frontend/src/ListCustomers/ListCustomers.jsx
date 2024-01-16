@@ -170,7 +170,7 @@ export default function Customers() {
 			) : (
 				<>
 					<div id="topPanel">
-						<p>{documentCount.current} record(s)</p>
+						<p>{documentCount.current} record(s) in total</p>
 						<select
 							id="showPerPage"
 							onChange={(e) => {
@@ -192,19 +192,20 @@ export default function Customers() {
 						)}
 					</div>
 
-					<table>
-						<thead>
-							<tr>
-								<th>Customer Name</th>
-								<th>Phone Number</th>
-								<th>Number of Devices</th>
-							</tr>
-						</thead>
-						{error && (
-							<p>{`There was a problem with fetching the data - ${error}`}</p>
-						)}
-						{data && <tbody id="deviceList">{renderData()}</tbody>}
-					</table>
+					{error ? (
+						<p>{`There was a problem with fetching the data - ${error}`}</p>
+					) : (
+						<table>
+							<thead>
+								<tr>
+									<th>Customer Name</th>
+									<th>Phone Number</th>
+									<th>Number of Devices</th>
+								</tr>
+							</thead>
+							{data && <tbody id="deviceList">{renderData()}</tbody>}
+						</table>
+					)}
 					{modal && (
 						<UpdateCustomer
 							toggleModal={hideModal}
