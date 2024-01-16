@@ -3,7 +3,7 @@ const Device = require("../models/devices");
 const Customer = require("../models/customers");
 
 const getDevices = async (req, res) => {
-	const { id, owner, fields } = req.query;
+	const { id, owner, fields, sort, deviceType, repairStatus } = req.query;
 	const newQuery = {};
 
 	if (id) {
@@ -20,6 +20,14 @@ const getDevices = async (req, res) => {
 			});
 	}
 
+	if (deviceType && deviceType !== "All") {
+		newQuery.device_type = deviceType;
+	}
+
+	if (repairStatus && repairStatus !== "All") {
+		newQuery.status = repairStatus;
+	}
+
 	if (owner) {
 		newQuery.owner = owner;
 	}
@@ -31,16 +39,23 @@ const getDevices = async (req, res) => {
 		result.select(fieldList);
 	}
 
+	if (sort) {
+		const sortList = sort.split(",").join(" ");
+		result.sort(sortList);
+	} else {
+		result.sort("-dateAdded");
+	}
+
 	const page = Number(req.query.page) || 1;
 	const limit = Number(req.query.limit) || 50;
 	const skip = (page - 1) * limit;
 
 	result.skip(skip).limit(limit);
 
-	const documentCount = await Device.countDocuments();
+	// const documentCount = await Device.countDocuments();
 	const devices = await result;
 
-	return res.status(200).json({ amount: documentCount, message: devices });
+	return res.status(200).json({ amount: devices.length, message: devices });
 };
 
 const addDevice = async (req, res) => {
