@@ -146,7 +146,7 @@ export default function ListAllDevices() {
 					setActiveDeviceId(id);
 				}}
 			>
-				{device_status}
+				{device_status} ⮟
 			</a>
 		);
 	};
@@ -281,71 +281,77 @@ export default function ListAllDevices() {
 			) : (
 				<>
 					<div id="queryOptions">
-						<label htmlFor="deviceTypeSelector">Device type:</label>
-						<select
-							name="deviceTypeSelector"
-							id="deviceTypeSelector"
-							defaultValue={deviceType}
-							onChange={(e) => {
-								setDeviceType(e.target.value);
-							}}
-						>
-							<option value="All">All</option>
-							<option value="Laptop">Laptop</option>
-							<option value="TV">TV</option>
-							<option value="Phone">Phone</option>
-						</select>
-						<label htmlFor="repairStatusSelector">Status:</label>
-						<select
-							name="repairStatusSelector"
-							id="repairStatusSelector"
-							defaultValue={repairStatus}
-							onChange={(e) => {
-								setRepairStatus(e.target.value);
-							}}
-						>
-							<option>All</option>
-							<option>Ongoing</option>
-							<option>On-hold</option>
-							<option>Done</option>
-							<option>Cancelled</option>
-						</select>
-						<button
-							type="button"
-							onClick={(e) => {
-								e.preventDefault();
-								setFetch(true);
-							}}
-						>
-							Search
-						</button>
-						<button
-							type="button"
-							onClick={(e) => {
-								e.preventDefault();
-								resetSelectors();
-							}}
-						>
-							Reset
-						</button>
-						<br />
-						<label htmlFor="sortList"> Sort by:</label>
-						<select
-							name="sortList"
-							defaultValue={repairStatus}
-							onChange={(e) => {
-								setSortBy(e.target.value);
-								setFetch(true);
-							}}
-						>
-							<option value="-acceptDate">Newest: Accept Date</option>
-							<option value="acceptDate">Oldest: Accept Date</option>
-							<option value="brand">Brand (A-Z)</option>
-							<option value="model">Model (A-Z)</option>
-						</select>
+						<div id="query">
+							<label htmlFor="deviceTypeSelector">Device type:</label>
+							<select
+								name="deviceTypeSelector"
+								id="deviceTypeSelector"
+								defaultValue={deviceType}
+								onChange={(e) => {
+									setDeviceType(e.target.value);
+								}}
+							>
+								<option value="All">All</option>
+								<option value="Laptop">Laptop</option>
+								<option value="TV">TV</option>
+								<option value="Phone">Phone</option>
+							</select>
+							<label htmlFor="repairStatusSelector">Status:</label>
+							<select
+								name="repairStatusSelector"
+								id="repairStatusSelector"
+								defaultValue={repairStatus}
+								onChange={(e) => {
+									setRepairStatus(e.target.value);
+								}}
+							>
+								<option>All</option>
+								<option>Ongoing</option>
+								<option>On-hold</option>
+								<option>Done</option>
+								<option>Cancelled</option>
+							</select>
+							<button
+								type="button"
+								onClick={(e) => {
+									e.preventDefault();
+									setFetch(true);
+								}}
+							>
+								Search
+							</button>
+							<button
+								type="button"
+								onClick={(e) => {
+									e.preventDefault();
+									resetSelectors();
+								}}
+							>
+								Reset
+							</button>
+						</div>
+						<div id="sort">
+							<label htmlFor="sortList"> Sort by:</label>
+							<select
+								name="sortList"
+								defaultValue={repairStatus}
+								onChange={(e) => {
+									setSortBy(e.target.value);
+									setFetch(true);
+								}}
+							>
+								<option value="-acceptDate">Newest: Accept Date</option>
+								<option value="acceptDate">Oldest: Accept Date</option>
+								<option value="brand">Brand (A-Z)</option>
+								<option value="model">Model (A-Z)</option>
+							</select>
+						</div>
 					</div>
 					<div id="topPanel">
 						<p>{documentCount.current} record(s) in total</p>
+						{totalPages.current > 1 && (
+							<div id="pageSelector">{renderPageSelectors()}</div>
+						)}
 						<select
 							id="showPerPage"
 							onChange={(e) => {
@@ -362,9 +368,6 @@ export default function ListAllDevices() {
 							<option value="100">100</option>
 							<option value="250">250</option>
 						</select>
-						{totalPages.current > 1 && (
-							<div id="pageSelector">{renderPageSelectors()}</div>
-						)}
 					</div>
 					{error ? (
 						<p>{`There was a problem with fetching the data - ${error}`}</p>
@@ -385,7 +388,7 @@ export default function ListAllDevices() {
 										<th>Accept Date</th>
 									</tr>
 								</thead>
-								{data && <tbody id="deviceList">{renderData()}</tbody>}
+								{data && <tbody id="deviceListed">{renderData()}</tbody>}
 							</table>
 						</div>
 					)}

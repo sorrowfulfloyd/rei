@@ -165,148 +165,190 @@ export default function AddDevice({ hideAddDevice }) {
 
 	return (
 		<form action="POST" id="addDeviceForm" onSubmit={POSTdevice}>
-			<button
-				type="button"
-				id="close"
-				onClick={(e) => {
-					hideAddDevice();
-					e.preventDefault();
-				}}
-			>
-				X
-			</button>
-
-			<h1>Add a device</h1>
-
-			<div id="container">
-				<div id="deviceInfo">
-					<h2>Device info</h2>
-					<label htmlFor="deviceType">Device type: </label>
-					<select
-						name="deviceType"
+			<div id="wrapper">
+				<div id="top-header">
+					<button
+						type="button"
+						id="close"
 						onClick={(e) => {
-							e.target.value === "Other" ? setDisplay(true) : setDisplay(false);
+							hideAddDevice();
+							e.preventDefault();
 						}}
 					>
-						<option value="Laptop">Laptop</option>
-						<option value="TV">TV</option>
-						<option value="Phone">Phone</option>
-						<option value="Other">Other</option>
-					</select>
-					{displayTextbox && (
-						<input
-							type="text"
-							name="deviceTypeField"
-							id=""
-							placeholder="Device Type"
-							required
-						/>
-					)}
-					<label htmlFor="make">Brand: </label>
-					<input type="text" name="make" id="" placeholder="Brand" required />
-					<label htmlFor="model">Model: </label>
-					<input type="text" name="model" id="" placeholder="Model" required />
-					<label htmlFor="problem">Problem: </label>
-					<textarea
-						name="problem"
-						id=""
-						cols="18"
-						rows="2"
-						placeholder="Describe the problem.."
-						required
-					/>
-					<label htmlFor="note">Additional Notes: </label>
-					<textarea
-						name="note"
-						id=""
-						cols="18"
-						rows="2"
-						placeholder="Additional notes.."
-					/>
-					<label htmlFor="accessories">Accessories: </label>
-					<input
-						type="text"
-						name="accessories"
-						id=""
-						placeholder="Accessories"
-					/>
-					<span>
-						<input type="checkbox" name="workingRadio" id="" /> Is it working?
-					</span>
-					<span>
-						<input type="checkbox" name="warrantyRadio" id="" />
-						Does it have warranty?
-					</span>
+						X
+					</button>
+					<h1>ADD A DEVICE</h1>
 				</div>
-
-				<div id="customerInfo">
-					<h2>Customer Info</h2>
-					<span>
-						<input
-							type="radio"
-							name="checker"
-							defaultChecked
-							onChange={() => {
-								setDefaultOwner(true);
-							}}
-						/>
-						New
-					</span>
-					<span>
-						<input
-							type="radio"
-							name="checker"
-							onChange={() => {
-								setFetch(true);
-								setDefaultOwner(false);
-							}}
-						/>
-						Existing
-					</span>
-					{defaultOwner ? (
-						<div id="customerInfo">
-							<label htmlFor="customerName">Name: </label>
+				<div id="infoContainer">
+					<div id="deviceInfo">
+						<h2>Device</h2>
+						<h3>Type</h3>
+						<div id="device-type">
+							<select
+								name="deviceType"
+								onClick={(e) => {
+									e.target.value === "Other"
+										? setDisplay(true)
+										: setDisplay(false);
+								}}
+							>
+								<option value="Laptop">Laptop</option>
+								<option value="TV">TV</option>
+								<option value="Phone">Phone</option>
+								<option value="Other">Other</option>
+							</select>
+							{displayTextbox && (
+								<input
+									type="text"
+									name="deviceTypeField"
+									className="form-field a1"
+									placeholder="Device Type"
+									required
+								/>
+							)}
+						</div>
+						<h3>Make & Model</h3>
+						<div id="device-info">
 							<input
 								type="text"
-								name="customerName"
-								id=""
-								placeholder="Customer name"
+								name="make"
+								className="form-field a1"
+								placeholder="Brand"
 								required
 							/>
-							<label htmlFor="custormerPhone">Phone number: </label>
 							<input
-								type="tel"
-								name="customerPhone"
-								id=""
-								placeholder="Customer phone"
+								type="text"
+								name="model"
+								className="form-field a1"
+								placeholder="Model"
 								required
+							/>
+						</div>
+						<h3>Problem</h3>
+						<div id="device-problem">
+							<input
+								name="problem"
+								className="form-field a1"
+								placeholder="Describe the fault.."
+								required
+							/>
+							<input
+								name="note"
+								className="form-field a1"
+								placeholder="Additional notes.."
+							/>
+						</div>
+						<h3>Misc</h3>
+						<div id="device-misc">
+							<input
+								type="text"
+								name="accessories"
+								className="form-field a1"
+								placeholder="Accessories"
 							/>
 							<span>
-								<input type="checkbox" name="wantNotif" id="" defaultChecked />{" "}
-								Wants notifications about device status?
+								<input
+									type="checkbox"
+									name="workingRadio"
+									className="form-radio"
+								/>{" "}
+								Does device recieve power?
 							</span>
 							<span>
-								<input type="checkbox" name="wantAds" id="" defaultChecked />{" "}
-								Wants advertisements in the future?
+								<input
+									type="checkbox"
+									name="warrantyRadio"
+									className="form-radio"
+								/>
+								Does device have warranty?
 							</span>
 						</div>
-					) : (
-						<select
-							name="ownerList"
-							onChange={(e) => {
-								setSelectedOwner(e.target.value);
-							}}
-						>
-							{error ? <p>Error</p> : !loading && renderOwnerList()}
-						</select>
-					)}
+					</div>
+
+					<div id="customerInfo">
+						<h2>Customer</h2>
+						<div id="customerSelector">
+							<span>
+								<input
+									type="radio"
+									name="checker"
+									className="form-radio"
+									defaultChecked
+									onChange={() => {
+										setDefaultOwner(true);
+									}}
+								/>
+								New
+							</span>
+							<span>
+								<input
+									type="radio"
+									name="checker"
+									className="form-radio"
+									onChange={() => {
+										setFetch(true);
+										setDefaultOwner(false);
+									}}
+								/>
+								Existing
+							</span>
+						</div>
+						{defaultOwner ? (
+							<div id="newCustomerInfo">
+								<h3>Contact</h3>
+								<input
+									type="text"
+									name="customerName"
+									className="form-field a1"
+									placeholder="Name"
+									required
+								/>
+								<input
+									type="tel"
+									name="customerPhone"
+									className="form-field a1"
+									placeholder="Phone"
+									required
+								/>
+								<span>
+									<input
+										type="checkbox"
+										name="wantNotif"
+										className="form-radio"
+										defaultChecked
+									/>
+									Notifications about device status?
+								</span>
+								<span>
+									<input
+										type="checkbox"
+										name="wantAds"
+										className="form-radio"
+										defaultChecked
+									/>
+									Advertisements in the future?
+								</span>
+							</div>
+						) : (
+							<div id="newCustomerInfo">
+								<select
+									name="ownerList"
+									onChange={(e) => {
+										setSelectedOwner(e.target.value);
+									}}
+								>
+									{error ? <p>Error</p> : !loading && renderOwnerList()}
+								</select>
+							</div>
+						)}
+						<div id="device-button">
+							<button type="submit" id="deviceSubmitForm" form="addDeviceForm">
+								SUBMIT
+							</button>
+						</div>
+					</div>
 				</div>
 			</div>
-
-			<button type="submit" form="addDeviceForm">
-				SUBMIT
-			</button>
-			{console.log(process.env.API_URL)}
 		</form>
 	);
 }

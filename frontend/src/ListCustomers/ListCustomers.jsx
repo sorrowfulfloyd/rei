@@ -166,13 +166,16 @@ export default function Customers() {
 	};
 
 	return (
-		<div id="customerListContainer">
+		<div id="deviceListContainer">
 			{loading ? (
 				<p>Loading...</p>
 			) : (
 				<>
 					<div id="topPanel">
 						<p>{documentCount.current} record(s) in total</p>
+						{totalPages.current > 1 && (
+							<div id="pageSelector">{renderPageSelectors()}</div>
+						)}
 						<select
 							id="showPerPage"
 							onChange={(e) => {
@@ -189,15 +192,12 @@ export default function Customers() {
 							<option value="100">100</option>
 							<option value="250">250</option>
 						</select>
-						{totalPages.current > 1 && (
-							<div id="pageSelector">{renderPageSelectors()}</div>
-						)}
 					</div>
 
 					{error ? (
 						<p>{`There was a problem with fetching the data - ${error}`}</p>
 					) : (
-						<div id="customerList">
+						<div id="deviceList">
 							<table>
 								<thead>
 									<tr>
@@ -206,7 +206,7 @@ export default function Customers() {
 										<th>Number of Devices</th>
 									</tr>
 								</thead>
-								{data && <tbody id="deviceList">{renderData()}</tbody>}
+								{data && <tbody id="customerListed">{renderData()}</tbody>}
 							</table>
 						</div>
 					)}

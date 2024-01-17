@@ -1,5 +1,4 @@
 #addDeviceForm {
-  border: 1px solid black;
   max-width: 1280px;
   width: 80%;
   display: flex;
@@ -8,47 +7,202 @@
   flex-wrap: wrap;
   align-content: center;
   justify-content: center;
-  margin: auto;
-  padding: 0.5vw 5vw 2vw 5vw;
-  position: relative;
-  text-transform: uppercase;
+  margin: 0 auto;
+  padding: 0 5em;
   font-size: 0.9em;
 }
 
 #addDeviceForm h1 {
-  margin: 0.5em auto;
+  margin: 0.1em 0.5em;
+  font-weight: 800;
+  letter-spacing: .8rem;
+  text-shadow: 2px 4px #9d9d9d;
+}
+
+#addDeviceForm h2 {
+  margin: 0.5em;
+  font-size: 1.7em;
+  display: flex;
+  align-self: flex-start;
+  font-style: italic;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: .1rem;
+}
+
+#addDeviceForm h3 {
+  margin: 0.5em;
+  font-size: 1.25em;
+  display: flex;
+  align-self: flex-start;
+  font-style: italic;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: .2rem;
+}
+
+#deviceSubmitForm {
+  margin: 0.5em;
+}
+
+.form-field {
+  height: 30px;
+  padding: 0 10px;
+  outline: 0;
+  border: 2px solid darkcyan;
+  margin: 8px 5px;
+  border-radius: 4px;
+  background-color: #fff;
+  box-shadow: 5px 5px #560bad;
+  font-family: 'Rubik';
+  font-size: 1em;
+  width: 60%;
+  transition: box-shadow 0.3s, width 0.3s, height 0.2s;
+  font-size: 1.1em;
+  letter-spacing: .03rem;
+}
+
+.form-field::placeholder {
+  font-style: italic;
+}
+
+.form-field:focus {
+  width: 75%;
+  box-shadow: 3px 3px #ff006e;
 }
 
 #close {
   display: block;
   position: absolute;
-  top: 10px;
-  right: 14px;
+  top: 20px;
+  right: 5px;
   padding: 0.4em 0.7em;
   text-align: center;
   border: none;
 }
 
-#container {
-  display: flex;
-  flex-flow: row;
-  align-items: flex-start;
-  padding: 2vw;
-  margin: auto;
-  justify-content: center;
-  column-gap: 2vw;
-  border: 1px solid red;
-  /* width: 100%; */
-}
-#deviceInfo,
-#customerInfo {
+#top-header {
   display: flex;
   flex-flow: column;
-  align-items: flex-start;
-  justify-content: space-evenly;
-  padding: 1.5vw;
-  margin: 0.2vw;
+  align-items: center;
+  margin: .1vw;
+  width: 100%;
+  text-align: center;
+  position: relative;
+}
+
+#infoContainer {
+  display: flex;
+  flex-flow: row;
+  border: 3px ridge #000;
+  border-radius: 5px;
+  height: 60vh;
+  width: 100%;
+}
+
+#deviceInfo {
+  display: flex;
+  flex-flow: column;
+  align-items: center;
+  justify-content: flex-start;
+  padding: 1.5vw 1.2vw;
+  /* margin: 0.2vw; */
   line-height: 2vw;
-  min-width: 360px;
-  border: 1px solid green;
+  width: 60%;
+  line-height: 1.9em;
+}
+
+#customerInfo {
+  border-left: 2px solid #000;
+  width: 40%;
+  display: flex;
+  flex-flow: column;
+  align-items: center;
+
+  line-height: 2vw;
+  padding: 1.5vw 1.2vw;
+  justify-content: flex-end;
+}
+
+#newCustomerInfo {
+  display: flex;
+  flex-flow: column;
+  align-items: flex-end;
+  width: 100%;
+}
+
+#device-info {
+  display: flex;
+  width: 90%;
+  align-items: flex-start;
+  justify-content: flex-start;
+}
+
+#device-type {
+  display: flex;
+  width: 90%;
+  align-items: flex-start;
+  justify-content: flex-start;
+}
+
+#device-type select {
+  height: 32px;
+  margin: 10px 5px;
+}
+
+#device-problem {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  justify-content: flex-start;
+  width: 90%;
+}
+
+#device-problem>.form-field {
+  width: 92%;
+}
+
+#device-problem>.form-field:focus {
+  /* width: 100%; */
+  height: 36px;
+}
+
+#device-misc {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  width: 100%;
+}
+
+#device-button {
+  display: flex;
+  height: 100%;
+  width: 100%;
+  justify-content: center;
+  align-items: flex-end;
+}
+
+#device-button button {
+  width: 60%;
+  height: 40px;
+}
+
+#customerSelector {
+  display: flex;
+  width: 100%;
+  justify-content: flex-end;
+}
+
+#newCustomerInfo h3 {
+  align-self: flex-end;
+  justify-content: flex-end;
+}
+
+#customerInfo h2 {
+  justify-content: flex-end;
+  align-self: flex-end;
+}
+
+#wrapper {
+  width: 65%;
 }

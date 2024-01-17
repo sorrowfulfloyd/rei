@@ -4,6 +4,7 @@
 - Spice it up with CSS
 - Add .env support and tie the server name to it
 - Add a demo login
+- Form validation for adding a new Device
 
 #### Maybe
 - Add owner name reference to device document when it's created in the server and show it as read-only in the list maybe?
@@ -26,4 +27,3 @@
 - Add a reset button or a href for clean search again
 
 #### Later goals
-- Form validation for adding and updating docs

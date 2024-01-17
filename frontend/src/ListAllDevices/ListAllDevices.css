@@ -1,0 +1,76 @@
+#deviceListContainer {
+  border: 1px solid black;
+  display: flex;
+  flex-direction: column;
+  margin: 0 auto;
+  min-width: 90vw;
+  min-height: 70vh;
+}
+
+#queryOptions {
+  display: flex;
+  justify-content: space-between;
+}
+
+#query {
+  display: flex;
+  justify-content: flex-start;
+  align-items: center;
+  margin: 10px;
+  padding: 5px;
+}
+
+#query button {
+  margin-left: 10px;
+  padding: .25em 1em;
+  font-weight: 500;
+}
+
+#query select {
+  padding: .25em;
+  margin: 5px;
+}
+
+#sort {
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+  padding: .3em 1em;
+  margin: .1em 1em;
+}
+
+#topPanel {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: .3em 1em;
+  margin: .1em 1em;
+  height: 3vh;
+}
+
+#deviceList {
+  display: flex;
+  justify-content: space-around;
+  align-items: flex-end;
+  height: 100%;
+}
+
+#deviceList button {
+  padding: .35em 1em;
+  margin-bottom: 10px;
+}
+
+#deviceList td,
+th {
+  padding: 4px 10px;
+}
+
+#deviceList a {
+  text-decoration: underline;
+}
+
+#topPanel a {
+  text-decoration: underline;
+  margin: 3px;
+  font-size: 1.25em;
+}
