@@ -52,10 +52,10 @@ const getDevices = async (req, res) => {
 
 	result.skip(skip).limit(limit);
 
-	// const documentCount = await Device.countDocuments();
+	const documentCount = await Device.countDocuments();
 	const devices = await result;
 
-	return res.status(200).json({ amount: devices.length, message: devices });
+	return res.status(200).json({ amount: documentCount, message: devices });
 };
 
 const addDevice = async (req, res) => {

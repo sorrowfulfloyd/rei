@@ -32,10 +32,10 @@ const getCustomers = async (req, res) => {
 
 	result.skip(skip).limit(limit);
 
-	// const documentCount = await Customer.countDocuments();
+	const documentCount = await Customer.countDocuments();
 	const customers = await result;
 
-	return res.status(200).json({ amount: customers.length, message: customers });
+	return res.status(200).json({ amount: documentCount, message: customers });
 };
 
 const updateCustomer = async (req, res) => {
