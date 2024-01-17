@@ -15,7 +15,8 @@ export default function AddDevice({ hideAddDevice }) {
 	useEffect(() => {
 		if (fetchAgain) {
 			fetch(
-				"http://localhost:3000/customers?" +
+				process.env.API_URL +
+				"/customers?" +
 				new URLSearchParams({
 					fields: "name,phone,devices",
 				}),
@@ -56,7 +57,7 @@ export default function AddDevice({ hideAddDevice }) {
 	function POSTdevice(e) {
 		e.preventDefault();
 		if (defaultOwner) {
-			fetch("http://localhost:3000/devices", {
+			fetch(process.env.API_URL + "/devices", {
 				method: "POST",
 				headers: {
 					"Content-Type": "application/json",
@@ -105,7 +106,7 @@ export default function AddDevice({ hideAddDevice }) {
 					setDisplay(false);
 				});
 		} else if (selectedOwner) {
-			fetch("http://localhost:3000/devices", {
+			fetch(process.env.API_URL + "/devices", {
 				method: "POST",
 				headers: {
 					"Content-Type": "application/json",
@@ -178,7 +179,7 @@ export default function AddDevice({ hideAddDevice }) {
 			<h1>Add a device</h1>
 
 			<div id="container">
-				<span id="deviceInfo">
+				<div id="deviceInfo">
 					<h2>Device info</h2>
 					<label htmlFor="deviceType">Device type: </label>
 					<select
@@ -236,7 +237,7 @@ export default function AddDevice({ hideAddDevice }) {
 						<input type="checkbox" name="warrantyRadio" id="" />
 						Does it have warranty?
 					</span>
-				</span>
+				</div>
 
 				<div id="customerInfo">
 					<h2>Customer Info</h2>
@@ -305,6 +306,7 @@ export default function AddDevice({ hideAddDevice }) {
 			<button type="submit" form="addDeviceForm">
 				SUBMIT
 			</button>
+			{console.log(process.env.API_URL)}
 		</form>
 	);
 }

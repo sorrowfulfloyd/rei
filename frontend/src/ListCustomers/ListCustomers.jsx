@@ -15,7 +15,7 @@ export default function Customers() {
 	const [activeCustomerId, setActiveCustomerId] = useState(null);
 
 	const limitIndex = useRef(10);
-	const documentCount = useRef(1);
+	const documentCount = useRef(0);
 	const currentPage = useRef(1);
 	const totalPages = useRef(1);
 
@@ -33,7 +33,8 @@ export default function Customers() {
 	useEffect(() => {
 		if (fetchAgain) {
 			fetch(
-				"http://localhost:3000/customers?" +
+				process.env.API_URL +
+				"/customers?" +
 				new URLSearchParams({
 					page: currentPage.current,
 					limit: limitIndex.current,
@@ -74,7 +75,8 @@ export default function Customers() {
 
 	const deleteCustomer = (id) => {
 		fetch(
-			"http://localhost:3000/customers?" +
+			process.env.API_URL +
+			"/customers?" +
 			new URLSearchParams({
 				id: id,
 			}),
@@ -164,7 +166,7 @@ export default function Customers() {
 	};
 
 	return (
-		<div id="containery">
+		<div id="customerListContainer">
 			{loading ? (
 				<p>Loading...</p>
 			) : (
@@ -195,16 +197,18 @@ export default function Customers() {
 					{error ? (
 						<p>{`There was a problem with fetching the data - ${error}`}</p>
 					) : (
-						<table>
-							<thead>
-								<tr>
-									<th>Customer Name</th>
-									<th>Phone Number</th>
-									<th>Number of Devices</th>
-								</tr>
-							</thead>
-							{data && <tbody id="deviceList">{renderData()}</tbody>}
-						</table>
+						<div id="customerList">
+							<table>
+								<thead>
+									<tr>
+										<th>Customer Name</th>
+										<th>Phone Number</th>
+										<th>Number of Devices</th>
+									</tr>
+								</thead>
+								{data && <tbody id="deviceList">{renderData()}</tbody>}
+							</table>
+						</div>
 					)}
 					{modal && (
 						<UpdateCustomer

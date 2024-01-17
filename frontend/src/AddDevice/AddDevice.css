@@ -9,7 +9,7 @@
   align-content: center;
   justify-content: center;
   margin: auto;
-  padding: 0.5em 5em 2em 5em;
+  padding: 0.5vw 5vw 2vw 5vw;
   position: relative;
   text-transform: uppercase;
   font-size: 0.9em;
@@ -38,7 +38,7 @@
   justify-content: center;
   column-gap: 2vw;
   border: 1px solid red;
-  width: 100%;
+  /* width: 100%; */
 }
 #deviceInfo,
 #customerInfo {

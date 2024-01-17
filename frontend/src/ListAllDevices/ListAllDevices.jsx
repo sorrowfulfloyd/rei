@@ -20,7 +20,7 @@ export default function ListAllDevices() {
 	const [fetchAgain, setFetch] = useState(true);
 
 	const limitIndex = useRef(10);
-	const documentCount = useRef(1);
+	const documentCount = useRef(0);
 	const currentPage = useRef(1);
 	const totalPages = useRef(1);
 
@@ -38,7 +38,8 @@ export default function ListAllDevices() {
 	useEffect(() => {
 		if (fetchAgain) {
 			fetch(
-				"http://localhost:3000/devices?" +
+				process.env.API_URL +
+				"/devices?" +
 				new URLSearchParams({
 					page: currentPage.current,
 					limit: limitIndex.current,
@@ -82,7 +83,8 @@ export default function ListAllDevices() {
 
 	const deleteDevice = (id) => {
 		fetch(
-			"http://localhost:3000/devices?" +
+			process.env.API_URL +
+			"/devices?" +
 			new URLSearchParams({
 				id: id,
 			}),
@@ -151,7 +153,8 @@ export default function ListAllDevices() {
 
 	const updateRepairStatus = (id, newStatus) => {
 		fetch(
-			"http://localhost:3000/devices?" +
+			process.env.API_URL +
+			"/devices?" +
 			new URLSearchParams({
 				id: id,
 			}),
@@ -272,12 +275,12 @@ export default function ListAllDevices() {
 	};
 
 	return (
-		<div id="containerx">
+		<div id="deviceListContainer">
 			{loading ? (
 				<p>Loading...</p>
 			) : (
 				<>
-					<div id="query">
+					<div id="queryOptions">
 						<label htmlFor="deviceTypeSelector">Device type:</label>
 						<select
 							name="deviceTypeSelector"
@@ -366,23 +369,25 @@ export default function ListAllDevices() {
 					{error ? (
 						<p>{`There was a problem with fetching the data - ${error}`}</p>
 					) : (
-						<table>
-							<thead>
-								<tr>
-									<th>Device Type</th>
-									<th>Status</th>
-									<th>Brand</th>
-									<th>Model</th>
-									<th>Accessories</th>
-									<th>Problem</th>
-									<th>Additional Notes</th>
-									<th>Was it working?</th>
-									<th>Has Warranty?</th>
-									<th>Accept Date</th>
-								</tr>
-							</thead>
-							{data && <tbody id="deviceList">{renderData()}</tbody>}
-						</table>
+						<div id="deviceList">
+							<table>
+								<thead>
+									<tr>
+										<th>Device Type</th>
+										<th>Status</th>
+										<th>Brand</th>
+										<th>Model</th>
+										<th>Accessories</th>
+										<th>Problem</th>
+										<th>Additional Notes</th>
+										<th>Was it working?</th>
+										<th>Has Warranty?</th>
+										<th>Accept Date</th>
+									</tr>
+								</thead>
+								{data && <tbody id="deviceList">{renderData()}</tbody>}
+							</table>
+						</div>
 					)}
 					{modal && (
 						<UpdateDevice toggleModal={hideModal} device={activeDeviceId} />

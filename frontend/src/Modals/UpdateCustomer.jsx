@@ -12,7 +12,8 @@ function UpdateCustomer({ toggleModal, customer }) {
 		e.preventDefault();
 		console.log("test");
 		fetch(
-			"http://localhost:3000/customers?" +
+			process.env.API_URL +
+			"/customers?" +
 			new URLSearchParams({
 				id: customer,
 			}),
@@ -54,7 +55,8 @@ function UpdateCustomer({ toggleModal, customer }) {
 
 	function getCustomerDevices() {
 		fetch(
-			"http://localhost:3000/devices?" +
+			process.env.API_URL +
+			"/devices?" +
 			new URLSearchParams({
 				owner: customer,
 				fields: "status,device_type,brand,model,acceptDate",
@@ -88,7 +90,8 @@ function UpdateCustomer({ toggleModal, customer }) {
 	useEffect(() => {
 		if (fetchStatus) {
 			fetch(
-				"http://localhost:3000/customers?" +
+				process.env.API_URL +
+				"/customers?" +
 				new URLSearchParams({
 					id: customer,
 				}),

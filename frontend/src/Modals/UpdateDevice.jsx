@@ -11,7 +11,8 @@ function UpdateDevice({ toggleModal, device }) {
 	function POSTdevice(e) {
 		e.preventDefault();
 		fetch(
-			"http://localhost:3000/devices?" +
+			process.env.API_URL +
+			"/devices?" +
 			new URLSearchParams({
 				id: device,
 			}),
@@ -59,7 +60,8 @@ function UpdateDevice({ toggleModal, device }) {
 	useEffect(() => {
 		if (fetchStatus) {
 			fetch(
-				"http://localhost:3000/devices?" +
+				process.env.API_URL +
+				"/devices?" +
 				new URLSearchParams({
 					id: device,
 				}),
