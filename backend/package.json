@@ -1,24 +1,25 @@
 {
-  "name": "backend",
-  "version": "1.0.0",
-  "description": "",
-  "main": "start.js",
-  "scripts": {
-    "start": "node start.js",
-    "dev": "nodemon start.js"
-  },
-  "author": "",
-  "license": "ISC",
-  "dependencies": {
-    "bcryptjs": "^2.4.3",
-    "cors": "^2.8.5",
-    "dotenv": "^16.3.1",
-    "express": "^4.18.2",
-    "express-async-errors": "^3.1.1",
-    "jsonwebtoken": "^9.0.2",
-    "mongoose": "^8.0.0"
-  },
-  "devDependencies": {
-    "nodemon": "^3.0.1"
-  }
+	"name": "backend",
+	"version": "1.0.0",
+	"description": "",
+	"main": "start.js",
+	"scripts": {
+		"start": "node start.js",
+		"dev": "nodemon start.js",
+		"build": "npm i"
+	},
+	"author": "",
+	"license": "ISC",
+	"dependencies": {
+		"bcryptjs": "^2.4.3",
+		"cors": "^2.8.5",
+		"dotenv": "^16.3.1",
+		"express": "^4.18.2",
+		"express-async-errors": "^3.1.1",
+		"jsonwebtoken": "^9.0.2",
+		"mongoose": "^8.0.0"
+	},
+	"devDependencies": {
+		"nodemon": "^3.0.1"
+	}
 }
