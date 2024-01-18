@@ -61,7 +61,7 @@ export default function Customers() {
 					console.log("ListCustomers - Response data:", actualData);
 				})
 				.catch((err) => {
-					setError(err);
+					setError(err.status + " - " + err.statusText);
 				})
 				.finally(() => {
 					totalPages.current = Math.ceil(

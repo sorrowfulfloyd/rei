@@ -72,7 +72,8 @@ export default function ListAllDevices() {
 					console.log("ListAllDevices - Response data:", actualData);
 				})
 				.catch((err) => {
-					setError(err);
+					console.log(err);
+					setError(err.status + " - " + err.statusText);
 				})
 				.finally(() => {
 					setLoading(false);

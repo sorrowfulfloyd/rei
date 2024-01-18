@@ -1,13 +1,20 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import NavBar from "./NavBar/NavBar";
 import Footer from "./Footer/Footer";
 import Banner from "./Banner/Banner";
 import AddDevice from "./AddDevice/AddDevice";
 import ListAllDevices from "./ListAllDevices/ListAllDevices";
 import ListCustomers from "./ListCustomers/ListCustomers";
+import Auth from "./Auth/Auth";
 import "./App.css";
 
-function App() {
+export default function App() {
+  const [hasAuth, setAuth] = useState(true);
+
+  const handleAuth = () => {
+    setAuth(true);
+  };
+
   const [isAddDeviceVisible, setAddDeviceVisibility] = useState(false);
 
   const toggleAddDevice = () => {
@@ -32,7 +39,29 @@ function App() {
     setAllDevicesVisibility(false);
   };
 
-  return (
+  useEffect(() => {
+    fetch(process.env.API_URL + "/auth/", {
+      method: "GET",
+      headers: {
+        "Content-Type": "application/json",
+        token: document.cookie.slice(6),
+      },
+    })
+      .then((response) => {
+        if (response.ok) {
+          setAuth(true);
+        } else {
+          setAuth(false);
+        }
+      })
+      .catch((error) => {
+        console.log(error);
+        alert(`Something went wrong. Check the console.\n${error}`);
+        setAuth(false);
+      });
+  }, []);
+
+  return hasAuth ? (
     <>
       <NavBar />
       <Banner
@@ -51,7 +80,7 @@ function App() {
       )}
       <Footer />
     </>
+  ) : (
+    <Auth onRedirect={handleAuth} />
   );
 }
-
-export default App;

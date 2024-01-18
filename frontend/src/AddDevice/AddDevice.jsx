@@ -45,7 +45,7 @@ export default function AddDevice({ hideAddDevice }) {
 					console.log("DBG - Response data:", ownerList);
 				})
 				.catch((err) => {
-					setError(err);
+					setError(err.status + " - " + err.statusText);
 				})
 				.finally(() => {
 					setLoading(false);

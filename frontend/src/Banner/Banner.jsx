@@ -6,7 +6,7 @@ export default function Banner({
   showCustomers,
 }) {
   return (
-    <div className="container">
+    <div className="banner">
       <div className="welcome">
         <h1>Welcome, wary traveller!</h1>
       </div>

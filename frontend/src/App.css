@@ -29,6 +29,7 @@
   border: 2px solid black;
   box-shadow: -6px 6px lightseagreen;
 }
+
 .welcome,
 .buttons {
   display: flex;

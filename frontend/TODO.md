@@ -2,7 +2,6 @@
 
 #### Future
 - Spice it up with CSS
-- Add .env support and tie the server name to it
 - Add a demo login
 - Form validation for adding a new Device
 
@@ -25,5 +24,6 @@
   - filter the devices by status or device type
   - sort by accept date (asc,desc)
 - Add a reset button or a href for clean search again
+- Add .env support and tie the server name to it
 
 #### Later goals

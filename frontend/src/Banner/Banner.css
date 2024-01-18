@@ -1,4 +1,4 @@
-.container {
+.banner {
   display: flex;
   justify-content: space-between;
   align-items: center;
@@ -8,6 +8,7 @@
   border: 2px solid black;
   box-shadow: -6px 6px lightseagreen;
 }
+
 .welcome,
 .buttons {
   display: flex;
