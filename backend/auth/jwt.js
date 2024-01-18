@@ -1,5 +1,5 @@
-require('dotenv').config();
-const jwt = require('jsonwebtoken');
+require("dotenv").config();
+const jwt = require("jsonwebtoken");
 const KEY = process.env.TOKEN_KEY;
 
 /**
@@ -9,12 +9,12 @@ const KEY = process.env.TOKEN_KEY;
  * @return {string} The created token.
  */
 
-const createToken = (username) => { // RETARDS THAT MADE THE JWT LIB FOR NODE.JS DIDN'T ACTUALLY MADE IT ASYNC LOL. WAIT, MAYBE IT DOESN'T NEED TO BE?
-  try {
-    return jwt.sign({ for: username }, KEY);
-  } catch (error) {
-    return error;
-  }
+const createToken = (username) => {
+	try {
+		return jwt.sign({ for: username }, KEY);
+	} catch (error) {
+		return error;
+	}
 };
 
 /**
@@ -25,10 +25,10 @@ const createToken = (username) => { // RETARDS THAT MADE THE JWT LIB FOR NODE.JS
  */
 
 const validateToken = (token) => {
-  const result = jwt.verify(token, KEY, (error, token) => {
-    return token ? true : false;
-  })
-  return result;
+	const result = jwt.verify(token, KEY, (error, token) => {
+		return token ? true : false;
+	});
+	return result;
 };
 
-module.exports = { createToken, validateToken }
+module.exports = { createToken, validateToken };
