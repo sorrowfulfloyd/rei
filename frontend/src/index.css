@@ -106,6 +106,7 @@ button:active {
 
   button {
     font-size: 0.95rem;
+    padding: .2em .2em;
   }
 
   .left a {

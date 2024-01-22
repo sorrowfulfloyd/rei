@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, Fragment } from "react";
 import NavBar from "./NavBar/NavBar";
 import Footer from "./Footer/Footer";
 import Banner from "./Banner/Banner";
@@ -6,6 +6,7 @@ import AddDevice from "./AddDevice/AddDevice";
 import ListAllDevices from "./ListAllDevices/ListAllDevices";
 import ListCustomers from "./ListCustomers/ListCustomers";
 import Auth from "./Auth/Auth";
+import Scheduler from "./Scheduler/Scheduler";
 import "./App.css";
 
 export default function App() {
@@ -21,6 +22,7 @@ export default function App() {
 		setAddDeviceVisibility((prev) => !prev);
 		setAllDevicesVisibility(false);
 		setCustomersVisibility(false);
+		setCalendarVisibility(false);
 	};
 
 	const [isAllDevicesVisible, setAllDevicesVisibility] = useState(false);
@@ -29,6 +31,7 @@ export default function App() {
 		setAllDevicesVisibility((prev) => !prev);
 		setAddDeviceVisibility(false);
 		setCustomersVisibility(false);
+		setCalendarVisibility(false);
 	};
 
 	const [isCustomersVisible, setCustomersVisibility] = useState(false);
@@ -37,6 +40,16 @@ export default function App() {
 		setCustomersVisibility((prev) => !prev);
 		setAddDeviceVisibility(false);
 		setAllDevicesVisibility(false);
+		setCalendarVisibility(false);
+	};
+
+	const [isCalendarVisible, setCalendarVisibility] = useState(false);
+
+	const toggleCalendar = () => {
+		setCalendarVisibility((prev) => !prev);
+		setAddDeviceVisibility(false);
+		setAllDevicesVisibility(false);
+		setCustomersVisibility(false);
 	};
 
 	useEffect(() => {
@@ -57,17 +70,18 @@ export default function App() {
 			.catch((error) => {
 				console.log(error);
 				alert(`Couldn't connect to server to verify user is legit\n${error}`);
-				// setAuth(false);
+				setAuth(false);
 			});
 	}, []);
 
 	return hasAuth ? (
-		<>
+		<Fragment>
 			<NavBar />
 			<Banner
 				showAddDevice={toggleAddDevice}
 				showAllDevices={toggleAllDevices}
 				showCustomers={toggleCustomers}
+				showCalendar={toggleCalendar}
 			/>
 			{isAddDeviceVisible && (
 				<AddDevice hideAddDevice={setAddDeviceVisibility} />
@@ -78,8 +92,9 @@ export default function App() {
 			{isCustomersVisible && (
 				<ListCustomers hideCustomers={setCustomersVisibility} />
 			)}
+			{isCalendarVisible && <Scheduler hideCalendar={setCalendarVisibility} />}
 			<Footer />
-		</>
+		</Fragment>
 	) : (
 		<Auth onRedirect={handleAuth} />
 	);

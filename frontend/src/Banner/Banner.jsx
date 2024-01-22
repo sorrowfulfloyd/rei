@@ -4,6 +4,7 @@ export default function Banner({
   showAddDevice,
   showAllDevices,
   showCustomers,
+  showCalendar,
 }) {
   return (
     <div className="banner">
@@ -31,6 +32,13 @@ export default function Banner({
           }}
         >
           List all customers
+        </button>
+        <button
+          onClick={() => {
+            showCalendar();
+          }}
+        >
+          Show Calendar
         </button>
       </div>
     </div>

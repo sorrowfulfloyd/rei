@@ -209,7 +209,7 @@ function UpdateCustomer({ toggleModal, customer }) {
 											<br />
 											<br />
 											{customerDevices && (
-												<div>
+												<div id="ownedDevicesModal">
 													<p>Owned devices:</p>
 													{renderCustomerDevices()}
 												</div>

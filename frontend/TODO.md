@@ -1,12 +1,18 @@
 ### Frontend TODO
 
-#### Future
-- Spice it up with CSS
-- Add a demo login
-- Form validation for adding a new Device
+#### Current tasks
+- Calendar support for daily updates
+  - Figure out a way to parse the devices into the calendar.
+  - While adding a device, add that device to calendar list.
+    - Only list the devices with "Ongoing" status in the calendar
+  - Edit calendar's appearence to suit our needs
 
-#### Maybe
-- Add owner name reference to device document when it's created in the server and show it as read-only in the list maybe?
+#### Future tasks (DO IT IN ORDER FUTURE ME, PLEASE)
+- Pie charts and graphs
+- Form validation for adding a new Device
+- SMS/WhatsApp message support
+- Carry it onto Bootstrap or Tailwind
+- Localization support
 
 #### Done
 - Cleaned up and fixed bugs in the parser
@@ -25,5 +31,8 @@
   - sort by accept date (asc,desc)
 - Add a reset button or a href for clean search again
 - Add .env support and tie the server name to it
+- Spice it up with some basic CSS
+- Add a demo login
 
-#### Later goals
+#### Known bugs
+- Shown page does not automatically fallback to previous page when the current one gets emptied
