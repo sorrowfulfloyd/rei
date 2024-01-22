@@ -95,6 +95,8 @@ const addDevice = async (req, res) => {
 			object2: insertedOwner,
 		});
 	}
+
+	return res.status(400).json("Bad request");
 };
 
 const updateDevice = async (req, res) => {
@@ -137,12 +139,15 @@ const deleteDevice = async (req, res) => {
 		}
 
 		// console.log("after the loop ", ownerId.devices);
-
-		await Customer.findByIdAndUpdate(
-			ownerId._id,
-			{ devices: ownerId.devices },
-			{ new: true },
-		);
+		if (ownerId.devices.length > 0) {
+			await Customer.findByIdAndUpdate(
+				ownerId._id,
+				{ devices: ownerId.devices },
+				{ new: true },
+			);
+		} else {
+			await Customer.findByIdAndDelete(ownerId._id);
+		}
 	}
 
 	const deviceToBeDeleted = await Device.findByIdAndDelete(id);

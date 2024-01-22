@@ -36,6 +36,14 @@ const DeviceSchema = new Schema({
 		type: String,
 		default: () => new Date().toLocaleString("tr-TR"),
 	},
+	calendarStart: {
+		type: Date,
+		default: () => new Date(),
+	},
+	calendarEnd: {
+		type: Date,
+		default: () => new Date(new Date().setHours(new Date().getHours() + 4)),
+	},
 });
 
 const Device = mongoose.model("Device", DeviceSchema);
