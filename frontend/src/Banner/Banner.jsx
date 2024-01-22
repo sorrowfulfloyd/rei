@@ -9,7 +9,7 @@ export default function Banner({
   return (
     <div className="banner">
       <div className="welcome">
-        <h1>Welcome, wary traveller!</h1>
+        <h1>Welcome</h1>
       </div>
       <div className="buttons">
         <button

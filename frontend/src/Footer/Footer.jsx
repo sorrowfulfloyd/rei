@@ -1,6 +1,8 @@
 import "./Footer.css";
 
 export default function Footer() {
+  const VERSION = process.env.REACT_APP_VERSION;
+
   return (
     <>
       <div className="footer">
@@ -18,7 +20,7 @@ export default function Footer() {
         </div>
 
         <div className="version">
-          <p>version: 0.0.1</p>
+          <p>version: {VERSION}</p>
         </div>
       </div>
     </>

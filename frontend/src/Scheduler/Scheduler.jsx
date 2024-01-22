@@ -3,6 +3,7 @@ import { Calendar, momentLocalizer } from "react-big-calendar";
 import moment from "moment";
 
 import "react-big-calendar/lib/css/react-big-calendar.css";
+import "./Scheduler.css";
 
 import myEvents from "./myEvents";
 
@@ -14,7 +15,7 @@ function Scheduler() {
 	};
 
 	return (
-		<div style={{ height: "600px" }}>
+		<div className="schedulerWrapper">
 			<Calendar
 				localizer={localizer}
 				defaultDate={new Date()}

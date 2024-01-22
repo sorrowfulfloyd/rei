@@ -11,6 +11,14 @@
   padding-right: 1vh;
 }
 
+.mySocials {
+  margin-left: 5vw;
+}
+
+.version {
+  margin-right: 5vw;
+}
+
 .mySocials a {
   display: block;
   margin-block-start: 1em;
