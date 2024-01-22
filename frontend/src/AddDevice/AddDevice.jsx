@@ -16,10 +16,10 @@ export default function AddDevice({ hideAddDevice }) {
 		if (fetchAgain) {
 			fetch(
 				process.env.API_URL +
-				"/customers?" +
-				new URLSearchParams({
-					fields: "name,phone,devices",
-				}),
+					"/customers?" +
+					new URLSearchParams({
+						fields: "name,phone,devices",
+					}),
 				{
 					method: "GET",
 					headers: {
@@ -252,7 +252,7 @@ export default function AddDevice({ hideAddDevice }) {
 									name="workingRadio"
 									className="form-radio"
 								/>{" "}
-								Does device recieve power?
+								Does it recieve power?
 							</span>
 							<span>
 								<input
@@ -260,7 +260,7 @@ export default function AddDevice({ hideAddDevice }) {
 									name="warrantyRadio"
 									className="form-radio"
 								/>
-								Does device have warranty?
+								Does it have warranty?
 							</span>
 						</div>
 					</div>

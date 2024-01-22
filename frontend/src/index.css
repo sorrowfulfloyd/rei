@@ -119,6 +119,96 @@ button:active {
   }
 }
 
+@media (max-width: 600px) {
+  .welcome {
+    display: none;
+  }
+
+  .banner {
+    justify-content: center;
+    padding: 1em .5em;
+  }
+
+  #addDeviceForm {
+    padding: 0;
+    max-width: 85vw;
+    height: 75vh;
+    justify-content: flex-start;
+    padding-top: 2vh;
+  }
+
+  #wrapper {
+    min-width: 100%;
+    min-height: 100%;
+  }
+
+  #infoContainer {
+    /* height: 90%; */
+  }
+
+  #close {
+    top: 8px;
+    right: 2px;
+  }
+}
+
+@media (max-width: 516px) {
+  #addDeviceForm {
+    min-height: 850px;
+    margin-bottom: 35px;
+
+  }
+
+  #infoContainer {
+    flex-direction: column;
+  }
+
+  #deviceInfo {
+    width: 100%;
+    padding: 2px 0;
+    border-bottom: 2px solid black;
+  }
+
+  #customerInfo {
+    width: 100%;
+    padding: 2px 0;
+    border: none;
+    align-items: center;
+    height: 100%;
+  }
+
+  #customerInfo>h2,
+  #deviceInfo>h2 {
+    align-self: center;
+  }
+
+  #newCustomerInfo>h3 {
+    align-self: flex-start;
+  }
+
+  #customerSelector {
+    justify-content: center;
+  }
+
+  #device-misc {
+    align-items: center;
+  }
+
+  #top-header h1 {
+    font-size: 1.5em;
+    padding-bottom: 5px;
+  }
+
+  #newCustomerInfo {
+    align-items: center;
+  }
+
+  #close {
+    padding: .25em .55em;
+    top: -5px;
+  }
+}
+
 @media (max-width: 389px) {
   .right {
     min-width: 22%;
