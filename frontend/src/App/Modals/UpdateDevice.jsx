@@ -1,12 +1,20 @@
 import React, { useEffect, useState } from "react";
 import "./Modal.css";
 
+import Flatpickr from "react-flatpickr";
+import "flatpickr/dist/themes/airbnb.css";
+
+import moment from "moment";
+
 function UpdateDevice({ toggleModal, device }) {
 	const [data, setData] = useState();
 	const [loading, setLoading] = useState(true);
 	const [error, setError] = useState(null);
 	const [fetchStatus, setFetchStatus] = useState(true);
 	const [displayTextbox, setDisplay] = useState();
+
+	const [startDate, setStartDate] = useState();
+	const [minDate, setMinDate] = useState();
 
 	function POSTdevice(e) {
 		e.preventDefault();
@@ -34,6 +42,8 @@ function UpdateDevice({ toggleModal, device }) {
 					accessories: document.forms[0]["accessories"].value,
 					isWorking: document.forms[0]["workingRadio"].checked,
 					hasWarranty: document.forms[0]["warrantyRadio"].checked,
+					calendarStart: startDate,
+					calendarEnd: minDate,
 				}),
 			},
 		)
@@ -82,6 +92,8 @@ function UpdateDevice({ toggleModal, device }) {
 				})
 				.then((actualData) => {
 					setData(actualData.message);
+					setStartDate(moment(actualData.message.calendarStart).toDate());
+					setMinDate(moment(startDate).add(4, "hours").toDate());
 					console.log("EditDevice - Response data:", actualData.message);
 				})
 				.catch((err) => {
@@ -209,6 +221,74 @@ function UpdateDevice({ toggleModal, device }) {
 												/>
 												Does it have warranty?
 											</span>
+											<br />
+											Start date
+											<Flatpickr
+												data-enable-time
+												options={{
+													dateFormat: "d M Y - H:i",
+													enableTime: true,
+													time_24hr: true,
+													locale: {
+														firstDayOfWeek: 1,
+													},
+													disable: [
+														(date) => {
+															return date.getDay() === 0;
+														},
+													],
+													weekNumbers: true,
+													minTime: "08:00",
+													maxTime: "22:00",
+												}}
+												value={startDate}
+												onChange={([date]) => {
+													setStartDate(date);
+													if (
+														moment(date).day() === 6 &&
+														moment(date).hour() === 22
+													) {
+														setStartDate(
+															moment(date)
+																.add(1, "day")
+																.add(10, "hours")
+																.toDate(),
+														);
+														setMinDate(
+															moment(date)
+																.add(1, "day")
+																.add(14, "hours")
+																.toDate(),
+														);
+													} else {
+														setMinDate(moment(date).add(2, "hour").toDate());
+													}
+												}}
+											/>
+											End date
+											<Flatpickr
+												data-enable-time
+												options={{
+													dateFormat: "d M Y - H:i",
+													enableTime: true,
+													time_24hr: true,
+													minDate: minDate,
+													locale: {
+														firstDayOfWeek: 1,
+													},
+													disable: [
+														(date) => {
+															return date.getDay() === 0;
+														},
+													],
+													weekNumbers: true,
+													defaultDate: minDate,
+												}}
+												value={minDate}
+												onChange={([date]) => {
+													setMinDate(date);
+												}}
+											/>
 											<br />
 											<br />
 										</span>

@@ -1,9 +1,10 @@
-import { useRef, useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import "./AddDevice.css";
 
 import Flatpickr from "react-flatpickr";
-import moment from "moment";
 import "flatpickr/dist/themes/airbnb.css";
+
+import moment from "moment";
 
 export default function AddDevice({ hideAddDevice }) {
 	const [displayTextbox, setDisplay] = useState();
@@ -28,6 +29,7 @@ export default function AddDevice({ hideAddDevice }) {
 				"/customers?" +
 				new URLSearchParams({
 					fields: "name,phone,devices",
+					sort: "name",
 				}),
 				{
 					method: "GET",
@@ -171,7 +173,8 @@ export default function AddDevice({ hideAddDevice }) {
 	const renderOwnerList = () => {
 		return ownerList.map((owner, index) => (
 			<option id={owner._id} key={owner._id} value={owner._id}>
-				Name: {owner.name} Phone: {owner.phone} #{index + 1}
+				#{index + 1} Name: {owner.name} Phone: {owner.phone} Devices:{" "}
+				{owner.devices.length}
 			</option>
 		));
 	};
@@ -362,6 +365,14 @@ export default function AddDevice({ hideAddDevice }) {
 									dateFormat: "d M Y - H:i",
 									enableTime: true,
 									time_24hr: true,
+									locale: {
+										firstDayOfWeek: 1,
+									},
+									disable: [
+										(date) => {
+											return date.getDay() === 0;
+										},
+									],
 									weekNumbers: true,
 									minTime: "08:00",
 									maxTime: "22:00",
@@ -369,7 +380,16 @@ export default function AddDevice({ hideAddDevice }) {
 								value={startDate}
 								onChange={([date]) => {
 									setStartDate(date);
-									setMinDate(moment(date).add(2, "hour").toDate());
+									if (moment(date).day() === 6 && moment(date).hour() === 22) {
+										setStartDate(
+											moment(date).add(1, "day").add(10, "hours").toDate(),
+										);
+										setMinDate(
+											moment(date).add(1, "day").add(14, "hours").toDate(),
+										);
+									} else {
+										setMinDate(moment(date).add(2, "hour").toDate());
+									}
 								}}
 							/>
 							End date
@@ -380,6 +400,14 @@ export default function AddDevice({ hideAddDevice }) {
 									enableTime: true,
 									time_24hr: true,
 									minDate: minDate,
+									locale: {
+										firstDayOfWeek: 1,
+									},
+									disable: [
+										(date) => {
+											return date.getDay() === 0;
+										},
+									],
 									weekNumbers: true,
 									defaultDate: minDate,
 								}}
