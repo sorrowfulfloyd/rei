@@ -3,7 +3,7 @@ const Customer = require("../models/customers");
 const Device = require("../models/devices");
 
 const getCustomers = async (req, res) => {
-	const { id, fields } = req.query;
+	const { id, sort, fields } = req.query;
 	const newQuery = {};
 
 	if (id) {
@@ -24,6 +24,12 @@ const getCustomers = async (req, res) => {
 	if (fields) {
 		const fieldList = fields.split(",").join(" ");
 		result.select(fieldList);
+	}
+	if (sort) {
+		const sortList = sort.split(",").join(" ");
+		result.sort(sortList);
+	} else {
+		result.sort("-dateAdded");
 	}
 
 	const page = Number(req.query.page) || 1;
