@@ -127,13 +127,13 @@ button:active {
 
   .banner {
     justify-content: center;
-    padding: 1em .5em;
+    padding: 1vh .5vw;
   }
 
   #addDeviceForm {
     padding: 0;
     max-width: 85vw;
-    height: 75vh;
+    max-height: 75vh;
     justify-content: flex-start;
     padding-top: 2vh;
   }

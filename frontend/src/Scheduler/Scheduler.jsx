@@ -1,17 +1,51 @@
-import React, { useMemo } from "react";
+import { useEffect, useState } from "react";
 import { Calendar, momentLocalizer } from "react-big-calendar";
 import moment from "moment";
 
 import "react-big-calendar/lib/css/react-big-calendar.css";
 import "./Scheduler.css";
 
-import myEvents from "./myEvents";
-
 const localizer = momentLocalizer(moment);
 
-function Scheduler() {
+export default function Scheduler() {
+	const [data, setData] = useState([]);
+
+	useEffect(() => {
+		fetch(
+			process.env.API_URL +
+			"/devices?" +
+			new URLSearchParams({
+				fields: "device_type,status,brand,calendarStart,calendarEnd",
+				repairStatus: "Ongoing",
+			}),
+			{
+				method: "GET",
+				headers: {
+					"Content-Type": "application/json",
+					token: document.cookie.slice(6),
+				},
+			},
+		)
+			.then((response) => {
+				if (response.ok) {
+					return response.json();
+				}
+				throw response;
+			})
+			.then((actualData) => {
+				setData(parseDataToEvents(actualData.message));
+				console.log("Calendar - Response data:", actualData);
+			})
+			.catch((err) => {
+				setData([]);
+				console.log(err);
+			})
+			.finally(() => { });
+	}, []);
 	const handleSelectEvent = (event) => {
-		window.alert(event.title + event.desc);
+		window.alert(
+			`[DEBUG]\nevent title: ${event.title}\nevent start: ${event.start}\nevent end: ${event.end}`,
+		);
 	};
 
 	return (
@@ -19,11 +53,18 @@ function Scheduler() {
 			<Calendar
 				localizer={localizer}
 				defaultDate={new Date()}
-				events={myEvents}
+				events={data}
 				onSelectEvent={handleSelectEvent}
 			/>
 		</div>
 	);
 }
 
-export default Scheduler;
+const parseDataToEvents = (data) => {
+	return data.map((item, index) => ({
+		id: index,
+		title: item.device_type + " repair",
+		start: moment(item.calendarStart).toDate(),
+		end: moment(item.calendarEnd).toDate(),
+	}));
+};

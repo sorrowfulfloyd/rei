@@ -2,10 +2,11 @@
 
 #### Current tasks
 - Calendar support for daily updates
-  - Figure out a way to parse the devices into the calendar.
   - While adding a device, add that device to calendar list.
-    - Only list the devices with "Ongoing" status in the calendar
-  - Edit calendar's appearence to suit our needs
+    [x] - Only list the devices with "Ongoing" status in the calendar
+    - Let the user select the calendar start and end date while adding the device
+  [x] - Figure out a way to parse the devices into the calendar.
+  - Edit calendar's appearence to suit our needs (get rid of agenda view)
 
 #### Future tasks (DO IT IN ORDER FUTURE ME, PLEASE)
 - Pie charts and graphs

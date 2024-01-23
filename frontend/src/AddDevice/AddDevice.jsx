@@ -16,10 +16,10 @@ export default function AddDevice({ hideAddDevice }) {
 		if (fetchAgain) {
 			fetch(
 				process.env.API_URL +
-					"/customers?" +
-					new URLSearchParams({
-						fields: "name,phone,devices",
-					}),
+				"/customers?" +
+				new URLSearchParams({
+					fields: "name,phone,devices",
+				}),
 				{
 					method: "GET",
 					headers: {
@@ -76,6 +76,10 @@ export default function AddDevice({ hideAddDevice }) {
 						accessories: document.forms[0]["accessories"].value,
 						isWorking: document.forms[0]["workingRadio"].checked,
 						hasWarranty: document.forms[0]["warrantyRadio"].checked,
+						calendarStart: new Date(),
+						calendarEnd: new Date(
+							new Date().setHours(new Date().getHours() + 4),
+						),
 					},
 					customerInfo: {
 						name: document.forms[0]["customerName"].value,
@@ -125,6 +129,8 @@ export default function AddDevice({ hideAddDevice }) {
 						accessories: document.forms[0]["accessories"].value,
 						isWorking: document.forms[0]["workingRadio"].checked,
 						hasWarranty: document.forms[0]["warrantyRadio"].checked,
+						calendarStart: new Date(),
+						calendarEnd: new Date(),
 					},
 					id: selectedOwner,
 				}),

@@ -43,7 +43,7 @@ export default function ListAllDevices() {
 				new URLSearchParams({
 					page: currentPage.current,
 					limit: limitIndex.current,
-					fields: "-__v,-owner",
+					fields: "-__v,-owner,-technicianName",
 					deviceType: deviceType,
 					repairStatus: repairStatus,
 					sort: sortBy,
