@@ -3,10 +3,14 @@
 #### Current tasks
 - Calendar support for daily updates
   - While adding a device, add that device to calendar list.
+    
     [x] - Only list the devices with "Ongoing" status in the calendar
-    - Let the user select the calendar start and end date while adding the device
+
+    [x] - Let the user select the calendar start and end date while adding the device
+
   [x] - Figure out a way to parse the devices into the calendar.
-  - Edit calendar's appearence to suit our needs (get rid of agenda view)
+
+  - Edit calendar's appearence (get rid of agenda view)
 
 #### Future tasks (DO IT IN ORDER FUTURE ME, PLEASE)
 - Pie charts and graphs
@@ -34,6 +38,9 @@
 - Add .env support and tie the server name to it
 - Spice it up with some basic CSS
 - Add a demo login
+
+#### QoL
+- Don't let the users schedule a repair for already booked hours
 
 #### Known bugs
 - Shown page does not automatically fallback to previous page when the current one gets emptied

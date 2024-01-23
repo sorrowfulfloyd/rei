@@ -175,6 +175,13 @@
   width: 100%;
 }
 
+#calendarDate {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 100%;
+}
+
 #device-button {
   display: flex;
   height: 100%;

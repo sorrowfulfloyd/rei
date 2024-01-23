@@ -1,6 +1,10 @@
 import { useRef, useEffect, useState } from "react";
 import "./AddDevice.css";
 
+import Flatpickr from "react-flatpickr";
+import moment from "moment";
+import "flatpickr/dist/themes/airbnb.css";
+
 export default function AddDevice({ hideAddDevice }) {
 	const [displayTextbox, setDisplay] = useState();
 	const [defaultOwner, setDefaultOwner] = useState(true);
@@ -11,6 +15,11 @@ export default function AddDevice({ hideAddDevice }) {
 
 	const [ownerList, setOwnerList] = useState();
 	const [selectedOwner, setSelectedOwner] = useState();
+
+	const [startDate, setStartDate] = useState(new Date());
+	const [minDate, setMinDate] = useState(
+		moment(startDate).add(4, "hours").toDate(),
+	);
 
 	useEffect(() => {
 		if (fetchAgain) {
@@ -76,10 +85,8 @@ export default function AddDevice({ hideAddDevice }) {
 						accessories: document.forms[0]["accessories"].value,
 						isWorking: document.forms[0]["workingRadio"].checked,
 						hasWarranty: document.forms[0]["warrantyRadio"].checked,
-						calendarStart: new Date(),
-						calendarEnd: new Date(
-							new Date().setHours(new Date().getHours() + 4),
-						),
+						calendarStart: startDate,
+						calendarEnd: minDate,
 					},
 					customerInfo: {
 						name: document.forms[0]["customerName"].value,
@@ -129,8 +136,8 @@ export default function AddDevice({ hideAddDevice }) {
 						accessories: document.forms[0]["accessories"].value,
 						isWorking: document.forms[0]["workingRadio"].checked,
 						hasWarranty: document.forms[0]["warrantyRadio"].checked,
-						calendarStart: new Date(),
-						calendarEnd: new Date(),
+						calendarStart: startDate,
+						calendarEnd: minDate,
 					},
 					id: selectedOwner,
 				}),
@@ -347,6 +354,41 @@ export default function AddDevice({ hideAddDevice }) {
 								</select>
 							</div>
 						)}
+						<div id="calendarDate">
+							Start date
+							<Flatpickr
+								data-enable-time
+								options={{
+									dateFormat: "d M Y - H:i",
+									enableTime: true,
+									time_24hr: true,
+									weekNumbers: true,
+									minTime: "08:00",
+									maxTime: "22:00",
+								}}
+								value={startDate}
+								onChange={([date]) => {
+									setStartDate(date);
+									setMinDate(moment(date).add(2, "hour").toDate());
+								}}
+							/>
+							End date
+							<Flatpickr
+								data-enable-time
+								options={{
+									dateFormat: "d M Y - H:i",
+									enableTime: true,
+									time_24hr: true,
+									minDate: minDate,
+									weekNumbers: true,
+									defaultDate: minDate,
+								}}
+								value={minDate}
+								onChange={([date]) => {
+									setMinDate(date);
+								}}
+							/>
+						</div>
 						<div id="device-button">
 							<button type="submit" id="deviceSubmitForm" form="addDeviceForm">
 								SUBMIT
