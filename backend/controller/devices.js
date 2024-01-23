@@ -110,7 +110,6 @@ const updateDevice = async (req, res) => {
 	// }
 
 	const deviceToBeUpdated = await Device.findByIdAndUpdate(id, payload, {
-		new: true,
 		runValidators: false,
 	});
 

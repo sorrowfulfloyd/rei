@@ -43,10 +43,6 @@ const updateCustomer = async (req, res) => {
 	const payload = req.body;
 
 	console.log("[debug] - req body for updating a customer ", payload, id);
-	// stupid hack to keep it going, CHANGE THIS LATER
-	// if (Object.keys(req.body).length !== 8) {
-	// 	return res.status(400).json({ message: "Request body is not right" });
-	// }
 
 	const customerToBeUpdated = await Customer.findByIdAndUpdate(id, payload, {
 		new: true,
@@ -68,18 +64,17 @@ const deleteCustomer = async (req, res) => {
 	const owner = await Customer.findById(id);
 	const tumbler = [];
 
-	console.log("binded device IDs ->", owner.devices);
+	// console.log("binded device IDs ->", owner.devices);
 
 	for (const IDs of owner.devices) {
 		if (mongoose.Types.ObjectId.isValid(IDs)) {
-			console.log(IDs, "is a valid id");
+			// console.log(IDs, "is a valid id");
 			tumbler.push(IDs);
 		}
 	}
 
 	for await (const tumbled of tumbler) {
-		const index = await Device.findByIdAndDelete(tumbled);
-		console.log("deleted one! ", index);
+		await Device.findByIdAndDelete(tumbled);
 	}
 
 	const customerToBeDeleted = await Customer.findByIdAndDelete(id);

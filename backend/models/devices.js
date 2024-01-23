@@ -3,21 +3,29 @@ const mongoose = require("mongoose");
 const { Schema } = mongoose;
 
 // --------------
-
-// Example request body:
-// {
-//   "device_type": "laptop",
-//   "status": "ongoing",
-//   "brand": "Apple",
-//   "model": "Macbook Pro",
-//   "problem": "Turns up but only has black screen",
-//   "accessories": "AC Cord, Mouse, Laptop bag",
-//   "isWorking": true,
-//   "hasWarranty": false,
-//   "hasAdapter": true,
-//   "technicianName": "Joseph"
-// }
-
+/*
+Example request body:
+{
+	"deviceInfo": {
+		"device_type": "laptop",
+		"status": "ongoing",
+		"brand": "Apple",
+		"model": "Macbook Pro",
+		"problem": "Turns up but only has black screen",
+		"accessories": "AC Cord, Mouse, Laptop bag",
+		"isWorking": true,
+		"hasWarranty": false,
+		"hasAdapter": true,
+		"technicianName": "Joseph"
+	},
+	"customerInfo": {
+		"name": "Customer name",
+		"phone": "Phone number",
+		"ads": false,
+		"notif": false
+	}
+}
+*/
 // --------------
 
 const DeviceSchema = new Schema({

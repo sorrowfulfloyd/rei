@@ -4,7 +4,7 @@ const findBy = require("../auth/findBy");
 const { validateToken, createToken } = require("../auth/jwt");
 
 const register = async (req, res) => {
-	console.log(req.body);
+	// console.log(req.body);
 	if (!req.body.email) {
 		return res.status(400).json("No email given");
 	}
@@ -46,7 +46,7 @@ const register = async (req, res) => {
 const login = async (req, res) => {
 	// console.log("Recieved a login request!");
 	const user = await findBy.Username(req.body.username, true);
-	console.log(user);
+	// console.log(user);
 	if (!user) {
 		// console.log( `[DEBUG (login.js)] - Someone tried to sign-in with an unknown username. Redirect them to register page! Username: ${req.body.username}`,);
 		res
