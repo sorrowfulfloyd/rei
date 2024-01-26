@@ -1,4 +1,5 @@
 import { useState, useEffect, Fragment } from "react";
+
 import NavBar from "./NavBar/NavBar";
 import Footer from "./Footer/Footer";
 import Banner from "./Banner/Banner";
@@ -7,6 +8,8 @@ import ListAllDevices from "./ListAllDevices/ListAllDevices";
 import ListCustomers from "./ListCustomers/ListCustomers";
 import Auth from "./Auth/Auth";
 import Scheduler from "./Scheduler/Scheduler";
+import Home from "./Home/Home";
+
 import "./App.css";
 
 export default function App() {
@@ -16,10 +19,21 @@ export default function App() {
 		setAuth(true);
 	};
 
+	const [isHomeVisible, setHomeVisibility] = useState(true);
+
+	const toggleHome = () => {
+		setHomeVisibility(true);
+		setAddDeviceVisibility(false);
+		setAllDevicesVisibility(false);
+		setCustomersVisibility(false);
+		setCalendarVisibility(false);
+	};
+
 	const [isAddDeviceVisible, setAddDeviceVisibility] = useState(false);
 
 	const toggleAddDevice = () => {
 		setAddDeviceVisibility((prev) => !prev);
+		setHomeVisibility(false);
 		setAllDevicesVisibility(false);
 		setCustomersVisibility(false);
 		setCalendarVisibility(false);
@@ -29,6 +43,7 @@ export default function App() {
 
 	const toggleAllDevices = () => {
 		setAllDevicesVisibility((prev) => !prev);
+		setHomeVisibility(false);
 		setAddDeviceVisibility(false);
 		setCustomersVisibility(false);
 		setCalendarVisibility(false);
@@ -38,6 +53,7 @@ export default function App() {
 
 	const toggleCustomers = () => {
 		setCustomersVisibility((prev) => !prev);
+		setHomeVisibility(false);
 		setAddDeviceVisibility(false);
 		setAllDevicesVisibility(false);
 		setCalendarVisibility(false);
@@ -47,6 +63,7 @@ export default function App() {
 
 	const toggleCalendar = () => {
 		setCalendarVisibility((prev) => !prev);
+		setHomeVisibility(false);
 		setAddDeviceVisibility(false);
 		setAllDevicesVisibility(false);
 		setCustomersVisibility(false);
@@ -78,11 +95,13 @@ export default function App() {
 		<Fragment>
 			<NavBar />
 			<Banner
+				showHome={toggleHome}
 				showAddDevice={toggleAddDevice}
 				showAllDevices={toggleAllDevices}
 				showCustomers={toggleCustomers}
 				showCalendar={toggleCalendar}
 			/>
+			{isHomeVisible && <Home hideHome={setHomeVisibility} />}
 			{isAddDeviceVisible && (
 				<AddDevice hideAddDevice={setAddDeviceVisibility} />
 			)}

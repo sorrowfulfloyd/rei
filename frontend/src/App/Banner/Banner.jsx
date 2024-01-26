@@ -1,6 +1,7 @@
 import "./Banner.css";
 
 export default function Banner({
+  showHome,
   showAddDevice,
   showAllDevices,
   showCustomers,
@@ -13,6 +14,15 @@ export default function Banner({
       </div>
       <div className="buttons">
         <button
+          type="button"
+          onClick={() => {
+            showHome();
+          }}
+        >
+          Home
+        </button>
+        <button
+          type="button"
           onClick={() => {
             showAddDevice();
           }}
@@ -20,6 +30,7 @@ export default function Banner({
           Add a device
         </button>
         <button
+          type="button"
           onClick={() => {
             showAllDevices();
           }}
@@ -27,6 +38,7 @@ export default function Banner({
           List all devices
         </button>
         <button
+          type="button"
           onClick={() => {
             showCustomers();
           }}
@@ -34,6 +46,7 @@ export default function Banner({
           List all customers
         </button>
         <button
+          type="button"
           onClick={() => {
             showCalendar();
           }}

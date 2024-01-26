@@ -136,6 +136,7 @@ function UpdateDevice({ toggleModal, device }) {
 											<label htmlFor="deviceType">Device type: </label>
 											<select
 												name="deviceType"
+												defaultValue={data.device_type}
 												onClick={(e) => {
 													e.target.value === "Other"
 														? setDisplay(true)
