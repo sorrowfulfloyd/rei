@@ -10,11 +10,7 @@ const KEY = process.env.TOKEN_KEY;
  */
 
 const createToken = (username) => {
-	try {
-		return jwt.sign({ for: username }, KEY);
-	} catch (error) {
-		return error;
-	}
+	return username ? jwt.sign({ for: username }, KEY) : null;
 };
 
 /**
@@ -26,6 +22,7 @@ const createToken = (username) => {
 
 const validateToken = (token) => {
 	const result = jwt.verify(token, KEY, (error, token) => {
+		if (error) return null;
 		return token ? true : false;
 	});
 	return result;
