@@ -9,6 +9,8 @@ const localizer = momentLocalizer(moment);
 
 export default function Scheduler() {
 	const [data, setData] = useState([]);
+	const [loading, setLoading] = useState(true);
+	const [error, setError] = useState(null);
 
 	useEffect(() => {
 		fetch(
@@ -29,6 +31,7 @@ export default function Scheduler() {
 		)
 			.then((response) => {
 				if (response.ok) {
+					setError(null);
 					return response.json();
 				}
 				throw response;
@@ -38,10 +41,11 @@ export default function Scheduler() {
 				console.log("Calendar - Response data:", actualData);
 			})
 			.catch((err) => {
-				setData([]);
-				console.log(err);
+				setError(err.status + " - " + err.statusText);
 			})
-			.finally(() => { });
+			.finally(() => {
+				setLoading(false);
+			});
 	}, []);
 
 	const handleSelectEvent = (event) => {
@@ -52,12 +56,18 @@ export default function Scheduler() {
 
 	return (
 		<div className="schedulerWrapper">
-			<Calendar
-				localizer={localizer}
-				defaultDate={new Date()}
-				events={data}
-				onSelectEvent={handleSelectEvent}
-			/>
+			{loading ? (
+				<p>Loading...</p>
+			) : error ? (
+				<p>{`There was a problem with fetching the data - ${error}`}</p>
+			) : (
+				<Calendar
+					localizer={localizer}
+					defaultDate={new Date()}
+					events={data}
+					onSelectEvent={handleSelectEvent}
+				/>
+			)}
 		</div>
 	);
 }
