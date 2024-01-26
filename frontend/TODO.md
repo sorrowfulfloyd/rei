@@ -2,13 +2,19 @@
 
 #### Current tasks
 - Pie charts and graphs
+  - [x] Add a pie chart for ongoing repairs
+  - [ ] Add charts for repairs that are completed, total device count in the DB, etc..
+  - [ ] Check out different charts for other options
+  - [ ] Make the labeling dynamic instead of tucking everything else into "Other"
 
 #### Future tasks (DO IT IN ORDER FUTURE ME, PLEASE)
-- Form validation for adding a new Device
+- Form validation for adding a new device
 - SMS/WhatsApp message support
 - Look for a better Listing tools or smth
-- Carry it onto Bootstrap or Tailwind
 - Localization support
+- Carry it onto Bootstrap or Tailwind
+  - [ ] Clean up the UI in-general and focus on user-friendliness
+  - [ ] Make the dashboard/home prettier
 
 #### Done
 - Cleaned up and fixed bugs in the parser

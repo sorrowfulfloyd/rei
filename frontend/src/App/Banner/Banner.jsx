@@ -27,7 +27,7 @@ export default function Banner({
             showAddDevice();
           }}
         >
-          Add a device
+          Add Device
         </button>
         <button
           type="button"
@@ -35,7 +35,7 @@ export default function Banner({
             showAllDevices();
           }}
         >
-          List all devices
+          Devices
         </button>
         <button
           type="button"
@@ -43,7 +43,7 @@ export default function Banner({
             showCustomers();
           }}
         >
-          List all customers
+          Customers
         </button>
         <button
           type="button"
@@ -51,7 +51,7 @@ export default function Banner({
             showCalendar();
           }}
         >
-          Show Calendar
+          Calendar
         </button>
       </div>
     </div>
