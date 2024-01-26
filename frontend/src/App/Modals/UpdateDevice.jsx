@@ -64,6 +64,7 @@ function UpdateDevice({ toggleModal, device }) {
 			})
 			.finally(() => {
 				setFetchStatus(true);
+				toggleModal();
 			});
 	}
 
@@ -93,7 +94,7 @@ function UpdateDevice({ toggleModal, device }) {
 				.then((actualData) => {
 					setData(actualData.message);
 					setStartDate(moment(actualData.message.calendarStart).toDate());
-					setMinDate(moment(startDate).add(4, "hours").toDate());
+					setMinDate(moment(actualData.message.calendarEnd).toDate());
 					console.log("EditDevice - Response data:", actualData.message);
 				})
 				.catch((err) => {
@@ -104,7 +105,7 @@ function UpdateDevice({ toggleModal, device }) {
 					setFetchStatus(false);
 				});
 		}
-	}, [device, fetchStatus]);
+	}, [device, fetchStatus, startDate]);
 	return (
 		<>
 			<div className="modal">

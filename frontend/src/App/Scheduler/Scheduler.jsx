@@ -15,7 +15,8 @@ export default function Scheduler() {
 			process.env.API_URL +
 			"/devices?" +
 			new URLSearchParams({
-				fields: "device_type,status,brand,calendarStart,calendarEnd",
+				fields:
+					"device_type,status,brand,problem,note,calendarStart,calendarEnd",
 				repairStatus: "Ongoing",
 			}),
 			{
@@ -42,9 +43,10 @@ export default function Scheduler() {
 			})
 			.finally(() => { });
 	}, []);
+
 	const handleSelectEvent = (event) => {
 		window.alert(
-			`[DEBUG]\nevent title: ${event.title}\nevent start: ${event.start}\nevent end: ${event.end}`,
+			`[DEBUG]\nevent title: ${event.title}\n\n${event.description}`,
 		);
 	};
 
@@ -63,7 +65,8 @@ export default function Scheduler() {
 const parseDataToEvents = (data) => {
 	return data.map((item, index) => ({
 		id: index,
-		title: item.device_type + " repair",
+		title: item.brand + " " + item.device_type + " repair",
+		description: `Device problem: ${item.problem}\nAdditional notes: ${item.note}`,
 		start: moment(item.calendarStart).toDate(),
 		end: moment(item.calendarEnd).toDate(),
 	}));
