@@ -103,7 +103,7 @@ const updateDevice = async (req, res) => {
 	const id = req.query.id;
 	const payload = req.body;
 
-	console.log("[debug] - req body for updating a device ", payload, id);
+	// console.log("[debug] - req body for updating a device ", payload, id);
 	// stupid hack to keep it going, CHANGE THIS LATER
 	// if (Object.keys(req.body).length !== 8) {
 	// 	return res.status(400).json({ message: "Request body is not right" });

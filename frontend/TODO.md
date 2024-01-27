@@ -9,18 +9,18 @@
 
 #### Future tasks (DO IT IN ORDER FUTURE ME, PLEASE)
 - Form validation for adding a new device
-- SMS/WhatsApp message support
 - Look for a better Listing tools or smth
+- SMS/WhatsApp message support
 - Localization support
 - Carry it onto Bootstrap or Tailwind
   - [ ] Clean up the UI in-general and focus on user-friendliness
   - [ ] Make the dashboard/home prettier
 
 #### Done
-- Cleaned up and fixed bugs in the parser
+- Make the fetching and parsing not suck
 - Bind amount of devices to their owners then display 
-- Pull n amount per request and page it 
-- Delete device
+- Pull N amount per request and page it 
+- Ability to delete a device
 - Modal to edit devices
 - Make the device type and status dynamic (easily changable with droplist)
 - Modal to edit customers(show owned devices as read-only when there)
@@ -42,7 +42,7 @@
   - [x] Figure out a way to parse the devices into the calendar.
   - [x] Edit devices calendar start and end dates
   - [x] Provide comprehensive event descriptions for calendar
-  - [?] Edit calendar's appearence (get rid of agenda view) -looks good for now, but come back to it for now-
+  - [ ] Edit calendar's appearence (get rid of agenda view) -looks good for now, but come back to it for now-
   - [ ] Make the users aware that changing the device's status removes it from the calendar 
 
 #### QoL
